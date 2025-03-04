@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mint NFT</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 2rem;
+      background-color: #f9f9f9;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 1rem;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #status { margin-top: 12px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Mint Your NFT</h1>
+    <p>Connect your wallet and mint your NFT below.</p>
+    <button id="connectWallet">Connect Zora Wallet</button>
+    <button id="mintNFT" disabled>Mint NFT</button>
+    <p id="status"></p>
+  </div>
+
+  <!-- Use the UMD build of ethers.js -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <!-- NFT.Storage will be loaded as a module below -->
+
+  <script type="module">
+    // Import NFTStorage from NFT.Storage's UMD module
+    import { NFTStorage, File } from "https://unpkg.com/nft.storage/dist/bundle.esm.min.js";
+
+    // ---------------------------
+    // Optical Illusion Generator (Demo)
+    // ---------------------------
+    // For demo purposes, we create a simple animation on a canvas with id="illusion".
+    // Replace the demo code with your full optical illusion generator if needed.
+    const illusionCanvas = document.createElement('canvas');
+    illusionCanvas.id = "illusion";
+    illusionCanvas.style.width = "100%";
+    illusionCanvas.style.height = "auto";
+    document.body.insertBefore(illusionCanvas, document.body.firstChild);
+    const ctx = illusionCanvas.getContext('2d');
+    function setupCanvas() {
+      const d = Math.min(window.innerWidth, window.innerHeight) * 0.95;
+      illusionCanvas.width = d;
+      illusionCanvas.height = d;
+    }
+    function drawIllusion() {
+      const time = Date.now() / 1000;
+      ctx.fillStyle = `hsl(${(time * 40) % 360}, 80%, 50%)`;
+      ctx.fillRect(0, 0, illusionCanvas.width, illusionCanvas.height);
+    }
+    function animateIllusion() {
+      drawIllusion();
+      requestAnimationFrame(animateIllusion);
+    }
+    setupCanvas();
+    animateIllusion();
+    window.addEventListener('resize', setupCanvas);
+    // ---------------------------
+
+    // ---------------------------
+    // NFT.Storage & Zora Integration
+    // ---------------------------
+    function dataURLToBlob(dataURL) {
+      const parts = dataURL.split(',');
+      const byteString = atob(parts[1]);
+      const mimeString = parts[0].split(':')[1].split(';')[0];
+      const ab = new ArrayBuffer(byteString.length);
+      const ia = new Uint8Array(ab);
+      for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+      }
+      return new Blob([ab], { type: mimeString });
+    }
+
+    async function uploadToNFTStorage(dataURL) {
+      const NFT_STORAGE_API_KEY = "270edbd6.7dc45579d8f84f999032ac8f9ac58f82";
+      const client = new NFTStorage({ token: NFT_STORAGE_API_KEY });
+      const blob = dataURLToBlob(dataURL);
+      const file = new File([blob], 'illusion.png', { type: 'image/png' });
+      const metadata = await client.store({
+        name: "Fractal Coin",
+        description: "A coin generated from a unique optical illusion created with GameStop Breakout Revival.",
+        image: file
+      });
+      return metadata.url;
+    }
+
+    const statusEl = document.getElementById('status');
+    document.getElementById('mintNFT').addEventListener('click', async () => {
+      if (!userAddress) {
+        alert("Please connect your Zora wallet first.");
+        return;
+      }
+      statusEl.textContent = "Uploading image and launching mint...";
+      showLoading("Uploading image and launching mint...");
+      try {
+        const imageData = illusionCanvas.toDataURL('image/png');
+        const metadataURI = await uploadToNFTStorage(imageData);
+        // Redirect to Zora's launch interface. Adjust URL/parameters per Zora docs.
+        window.location.href = `https://zora.co/launch?metadataURI=${encodeURIComponent(metadataURI)}&feeBPS=500`;
+      } catch (error) {
+        console.error("Minting error:", error);
+        statusEl.textContent = "Minting failed: " + error.message;
+        hideLoading();
+      }
+    });
+
+    // ---------------------------
+    // Zora Connect Wallet Integration using Zora Auth Kit
+    // ---------------------------
+    let provider, signer, userAddress;
+    const walletModal = document.getElementById('wallet-modal');
+    const walletInfo = document.getElementById('walletInfo');
+    const mintNFTBtn = document.getElementById('mintNFT');
+
+    async function connectZora() {
+      walletModal.classList.remove('active');
+      showLoading("Connecting to Zora...");
+      try {
+        const authKit = new window.ZoraAuthKit();
+        const user = await authKit.connect();
+        userAddress = user.address;
+        updateWalletInfo();
+        mintNFTBtn.disabled = false;
+        statusEl.textContent = "Wallet connected: " + userAddress;
+      } catch (error) {
+        walletInfo.innerHTML = `<p style="color:#ff5555;">Zora connection failed: ${error.message}</p>`;
+        console.error("Zora connection error:", error);
+      } finally {
+        hideLoading();
+      }
+    }
+
+    function updateWalletInfo() {
+      walletInfo.innerHTML = `<p><strong>Connected Wallet:</strong> ${userAddress}</p>`;
+      document.getElementById('connectWallet').textContent = "Wallet Connected";
+    }
+
+    document.getElementById('zoraConnectButton').addEventListener('click', () => {
+      connectZora();
+    });
+    document.getElementById('connectWallet').addEventListener('click', () => {
+      walletModal.classList.add('active');
+    });
+    document.getElementById('close-wallet-modal').addEventListener('click', () => {
+      walletModal.classList.remove('active');
+    });
+    walletModal.addEventListener('click', (e) => {
+      if (e.target === walletModal) walletModal.classList.remove('active');
+    });
+
+    // ---------------------------
+    // Loading Indicator Helpers
+    // ---------------------------
+    function showLoading(message) {
+      const loadingIndicator = document.getElementById('loadingIndicator');
+      loadingIndicator.querySelector('.loading-text').textContent = message;
+      loadingIndicator.style.display = 'flex';
+    }
+    function hideLoading() {
+      const loadingIndicator = document.getElementById('loadingIndicator');
+      loadingIndicator.style.display = 'none';
+    }
+  </script>
+
+  <!-- Wallet Modal for Zora Connect -->
+  <div id="wallet-modal">
+    <div class="wallet-modal-content">
+      <h2 style="margin-bottom: 12px; font-size: 18px; font-weight:600;">Connect Zora Wallet</h2>
+      <button id="zoraConnectButton" class="btn" style="margin-bottom: 12px;">Connect via Zora Connect</button>
+      <button id="close-wallet-modal" class="btn-secondary">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div class="loading-indicator" id="loadingIndicator">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Uploading image and connecting...</div>
+  </div>
+</body>
+</html>
