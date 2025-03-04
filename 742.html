@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Advanced Mandelbrot fractal explorer with Canvas/WebGL, fractal compression, and dynamic audio">
+  <title>🌐 NFT Fractal Explorer (Canvas-First)</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%2360a5fa'/></svg>" type="image/svg+xml">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      overflow: hidden;
+      background: #0a0a1a;
+      font-family: 'Inter', sans-serif;
+      color: #e2e8f0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    canvas {
+      width: 100%;
+      height: 100vh;
+      display: block;
+      touch-action: none;
+      background: #0f172a;
+    }
+    #controls {
+      position: fixed;
+      top: 1rem;
+      left: -320px;
+      width: 300px;
+      padding: 1.5rem;
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: 0 8px 8px 0;
+      backdrop-filter: blur(10px);
+      z-index: 10;
+      box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.3);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), left 0.4s ease;
+    }
+    #controls.visible { left: 1rem; transform: translateX(0); }
+    .control-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #94a3b8;
+    }
+    input[type="range"], select, button {
+      width: 100%;
+      margin-top: 0.25rem;
+      padding: 0.5rem;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 4px;
+      color: #e2e8f0;
+      font-size: 0.875rem;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    input[type="range"]:focus, select:focus, button:focus {
+      outline: none;
+      border-color: #60a5fa;
+      box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.3);
+    }
+    input[type="range"] {
+      -webkit-appearance: none;
+      height: 8px;
+      background: #334155;
+      border-radius: 4px;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      background: #60a5fa;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      background: #60a5fa;
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+    }
+    input[type="range"]:hover::-webkit-slider-thumb, input[type="range"]:hover::-moz-range-thumb {
+      background: #3b82f6;
+    }
+    select { appearance: none; background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23e2e8f0"><path d="M7 10l5 5 5-5z"/></svg>'); background-repeat: no-repeat; background-position: right 0.5rem center; padding-right: 2rem; }
+    button {
+      padding: 0.75rem 1.5rem;
+      background: #60a5fa;
+      border: none;
+      border-radius: 4px;
+      color: #0f172a;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    button:hover { background: #3b82f6; transform: translateY(-2px); }
+    button:active { background: #2563eb; transform: scale(0.98); }
+    #toggle-controls {
+      position: fixed;
+      top: 1.5rem;
+      left: 1.5rem;
+      padding: 0.5rem;
+      background: #60a5fa;
+      border: none;
+      border-radius: 50%;
+      width: 2.5rem;
+      height: 2.5rem;
+      color: #0f172a;
+      font-size: 1.25rem;
+      cursor: pointer;
+      z-index: 11;
+      transition: background 0.2s, transform 0.1s;
+    }
+    #toggle-controls:hover { background: #3b82f6; transform: scale(1.05); }
+    #toggle-controls:active { background: #2563eb; transform: scale(0.95); }
+    .tooltip {
+      position: absolute;
+      background: rgba(15, 23, 42, 0.95);
+      color: #e2e8f0;
+      padding: 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      z-index: 12;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .tooltip.visible { opacity: 1; }
+    @media (max-width: 1024px) {
+      #controls { width: 250px; padding: 1rem; }
+      label, input, select, button { font-size: 0.8125rem; }
+    }
+    @media (max-width: 768px) {
+      #controls {
+        top: 0.75rem;
+        left: -250px;
+        width: 80%;
+        max-width: 250px;
+      }
+      #controls.visible { left: 0.75rem; }
+      #toggle-controls { top: 1rem; left: 1rem; width: 2rem; height: 2rem; }
+    }
+    @media (max-width: 480px) {
+      #controls { padding: 0.5rem; }
+      label, input, select, button { font-size: 0.75rem; }
+      #toggle-controls { width: 1.75rem; height: 1.75rem; font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="fractal-canvas" aria-label="Interactive fractal visualization"></canvas>
+  <div id="controls" class="hidden" role="region" aria-label="Fractal controls">
+    <div class="control-group">
+      <label for="iterations">Iteration Depth (50-1000)</label>
+      <input type="range" id="iterations" min="50" max="1000" value="100" step="10">
+      <div class="tooltip" id="iterations-tooltip">Controls fractal complexity (higher = more detail)</div>
+    </div>
+    <div class="control-group">
+      <label for="compression-depth">Compression Depth (1-8)</label>
+      <input type="range" id="compression-depth" min="1" max="8" value="1" step="1">
+      <div class="tooltip" id="compression-depth-tooltip">Adds self-similar patterns (higher = more complexity)</div>
+    </div>
+    <div class="control-group">
+      <label for="color">Color Scheme</label>
+      <select id="color">
+        <option value="nebula">Nebula Blue</option>
+        <option value="fire">Fire Red</option>
+        <option value="aurora">Aurora Green</option>
+        <option value="plasma">Plasma Purple</option>
+        <option value="cosmic">Cosmic Rainbow</option>
+      </select>
+      <div class="tooltip" id="color-tooltip">Select visual style for fractal patterns</div>
+    </div>
+    <div class="control-group">
+      <label for="zoom-speed">Zoom Speed (0.5-3)</label>
+      <input type="range" id="zoom-speed" min="0.5" max="3" value="1.5" step="0.25">
+      <div class="tooltip" id="zoom-speed-tooltip">Adjusts how fast you zoom in/out</div>
+    </div>
+    <div class="control-group">
+      <label for="pattern-scale">Pattern Scale (0.1-2)</label>
+      <input type="range" id="pattern-scale" min="0.1" max="2" value="1" step="0.1">
+      <div class="tooltip" id="pattern-scale-tooltip">Scales fractal detail (smaller = finer, larger = broader)</div>
+    </div>
+    <div class="control-group">
+      <label for="audio-toggle">Audio Feedback</label>
+      <button id="audio-toggle" aria-label="Toggle audio feedback">🔊 On</button>
+      <div class="tooltip" id="audio-toggle-tooltip">Toggles dynamic audio based on fractal depth</div>
+    </div>
+    <button id="reset" aria-label="Reset view">Reset View</button>
+    <div class="tooltip" id="reset-tooltip">Returns to default view and settings</div>
+  </div>
+  <button id="toggle-controls" aria-label="Toggle controls">⚙️</button>
+
+  <script>
+    const canvas = document.getElementById('fractal-canvas');
+    let ctx = null;
+    let gl = null;
+    let isWebGL = false;
+
+    // Try WebGL first, fall back to Canvas
+    try {
+      gl = canvas.getContext('webgl');
+      if (gl) {
+        isWebGL = initializeWebGL();
+        if (!isWebGL) {
+          console.warn('WebGL initialization failed, falling back to Canvas.');
+          gl = null;
+          ctx = canvas.getContext('2d', { alpha: false });
+        }
+      } else {
+        console.warn('WebGL not supported, using Canvas.');
+        ctx = canvas.getContext('2d', { alpha: false });
+      }
+    } catch (e) {
+      console.error('WebGL error:', e);
+      ctx = canvas.getContext('2d', { alpha: false });
+    }
+
+    const controls = document.getElementById('controls');
+    const toggleControls = document.getElementById('toggle-controls');
+
+    // State management
+    const state = {
+      width: window.innerWidth,
+      height: window.innerHeight,
+      centerX: 0,
+      centerY: 0,
+      zoom: 300,
+      maxIter: 100,
+      compressionDepth: 1,
+      colorScheme: 'nebula',
+      zoomSpeed: 1.5,
+      patternScale: 1,
+      isDragging: false,
+      lastPos: null,
+      velocity: { x: 0, y: 0 },
+      lastTap: 0,
+      audioOn: true,
+      time: 0,
+      animationFrame: null
+    };
+
+    // Canvas Initialization
+    function initCanvas() {
+      state.width = window.innerWidth;
+      state.height = window.innerHeight;
+      canvas.width = state.width * window.devicePixelRatio;
+      canvas.height = state.height * window.devicePixelRatio;
+      canvas.style.width = `${state.width}px`;
+      canvas.style.height = `${state.height}px`;
+      if (ctx) ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      render();
+    }
+
+    // WebGL Initialization
+    function initializeWebGL() {
+      try {
+        // Vertex Shader
+        const vertexShaderSrc = `
+          attribute vec2 position;
+          varying vec2 vTexCoord;
+          void main() {
+            gl_Position = vec4(position, 0.0, 1.0);
+            vTexCoord = (position + 1.0) * 0.5;
+          }
+        `;
+
+        // Fragment Shader (Mandelbrot with fractal compression and dynamic coloring)
+        const fragmentShaderSrc = `
+          precision highp float;
+          varying vec2 vTexCoord;
+          uniform vec2 resolution;
+          uniform vec2 center;
+          uniform float zoom;
+          uniform float time;
+          uniform int maxIterations;
+          uniform int compressionDepth;
+          uniform float patternScale;
+          uniform int colorMode;
+
+          vec3 nebula(float t, vec2 uv) {
+            float noise = sin(uv.x * 0.1 * patternScale + uv.y * 0.1 * patternScale + time * 0.1);
+            return vec3(sin(t + noise * 0.5), cos(t * 1.3 + 0.5 + noise * 0.3), sin(t * 0.7 + noise * 0.4));
+          }
+          vec3 fire(float t, vec2 uv) {
+            float noise = cos(uv.x * 0.15 * patternScale + uv.y * 0.15 * patternScale + time * 0.1);
+            return vec3(0.9 + sin(t + noise * 0.3), 0.2 + cos(t * 1.5 + 0.5 + noise * 0.2), 0.1);
+          }
+          vec3 aurora(float t, vec2 uv) {
+            float noise = sin(uv.x * 0.12 * patternScale + uv.y * 0.12 * patternScale + time * 0.1);
+            return vec3(0.2 + sin(t + noise * 0.4), 0.8, cos(t * 0.8 + noise * 0.3));
+          }
+          vec3 plasma(float t, vec2 uv) {
+            float noise = cos(uv.x * 0.1 * patternScale + uv.y * 0.1 * patternScale + time * 0.1);
+            return vec3(0.5 + sin(t + noise * 0.3), 0.2 + cos(t * 1.2 + 0.5 + noise * 0.2), 0.8 + sin(t * 0.9 + noise * 0.4));
+          }
+          vec3 cosmic(float t, vec2 uv) {
+            float noise = sin(uv.x * 0.08 * patternScale + uv.y * 0.08 * patternScale + time * 0.1);
+            return vec3(sin(t + noise * 0.5), cos(t * 1.4 + noise * 0.3), sin(t * 0.6 + noise * 0.4));
+          }
+
+          void main() {
+            vec2 c = (vTexCoord * 2.0 - 1.0) * resolution / zoom + center;
+            vec2 z = vec2(0.0);
+            int iter = 0;
+            float scale = 1.0;
+
+            for (int depth = 0; depth < 8; depth++) {
+              if (depth >= compressionDepth) break;
+              scale *= 0.5 * patternScale;
+              c *= scale;
+              z = vec2(0.0);
+              iter = 0;
+              for (; iter < maxIterations; iter++) {
+                float x = z.x * z.x - z.y * z.y + c.x;
+                float y = 2.0 * z.x * z.y + c.y;
+                z = vec2(x, y);
+                if (length(z) > 2.0) break;
+              }
+              if (iter < maxIterations) break;
+            }
+
+            float t = float(iter) / float(maxIterations) + time * 0.05;
+            vec3 color = vec3(0.0);
+            vec2 uv = vTexCoord * patternScale;
+            if (iter == maxIterations) {
+              color = vec3(0.0);
+            } else {
+              if (colorMode == 0) color = nebula(t, uv);
+              else if (colorMode == 1) color = fire(t, uv);
+              else if (colorMode == 2) color = aurora(t, uv);
+              else if (colorMode == 3) color = plasma(t, uv);
+              else if (colorMode == 4) color = cosmic(t, uv);
+            }
+            gl_FragColor = vec4(color, 1.0);
+          }
+        `;
+
+        // WebGL Setup with Error Handling
+        function createShader(type, source) {
+          const shader = gl.createShader(type);
+          gl.shaderSource(shader, source);
+          gl.compileShader(shader);
+          if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+            console.error('Shader compilation error:', gl.getShaderInfoLog(shader));
+            gl.deleteShader(shader);
+            return null;
+          }
+          return shader;
+        }
+
+        function createProgram(vertexShaderSrc, fragmentShaderSrc) {
+          const vertexShader = createShader(gl.VERTEX_SHADER, vertexShaderSrc);
+          const fragmentShader = createShader(gl.FRAGMENT_SHADER, fragmentShaderSrc);
+          if (!vertexShader || !fragmentShader) return null;
+
+          const program = gl.createProgram();
+          gl.attachShader(program, vertexShader);
+          gl.attachShader(program, fragmentShader);
+          gl.linkProgram(program);
+          if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+            console.error('Program linking error:', gl.getProgramInfoLog(program));
+            gl.deleteProgram(program);
+            return null;
+          }
+          return program;
+        }
+
+        const program = createProgram(vertexShaderSrc, fragmentShaderSrc);
+        if (!program) return false;
+
+        gl.useProgram(program);
+
+        const buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+        const posLoc = gl.getAttribLocation(program, 'position');
+        gl.enableVertexAttribArray(posLoc);
+        gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+        state.uniforms = {
+          resolution: gl.getUniformLocation(program, 'resolution'),
+          center: gl.getUniformLocation(program, 'center'),
+          zoom: gl.getUniformLocation(program, 'zoom'),
+          time: gl.getUniformLocation(program, 'time'),
+          maxIterations: gl.getUniformLocation(program, 'maxIterations'),
+          compressionDepth: gl.getUniformLocation(program, 'compressionDepth'),
+          patternScale: gl.getUniformLocation(program, 'patternScale'),
+          colorMode: gl.getUniformLocation(program, 'colorMode')
+        };
+
+        return true;
+      } catch (e) {
+        console.error('WebGL initialization error:', e);
+        return false;
+      }
+    }
+
+    // Canvas Rendering Functions
+    const colorsCanvas = {
+      nebula: (i, x, y) => {
+        const t = i / state.maxIter;
+        const noise = Math.sin(x * 0.01 * state.patternScale + y * 0.01 * state.patternScale + state.time * 0.1);
+        return `hsl(${360 * t + noise * 30}, 70%, 50%)`;
+      },
+      fire: (i, x, y) => {
+        const t = i / state.maxIter;
+        const noise = Math.cos(x * 0.02 * state.patternScale + y * 0.02 * state.patternScale + state.time * 0.1);
+        return `hsl(${45 + 180 * t + noise * 20}, 80%, 50%)`;
+      },
+      aurora: (i, x, y) => {
+        const t = i / state.maxIter;
+        const noise = Math.sin(x * 0.015 * state.patternScale + y * 0.015 * state.patternScale + state.time * 0.1);
+        return `hsl(${120 + 240 * t + noise * 40}, 70%, 40%)`;
+      },
+      plasma: (i, x, y) => {
+        const t = i / state.maxIter;
+        const noise = Math.cos(x * 0.01 * state.patternScale + y * 0.01 * state.patternScale + state.time * 0.1);
+        return `hsl(${270 + 180 * t + noise * 30}, 60%, 50%)`;
+      },
+      cosmic: (i, x, y) => {
+        const t = i / state.maxIter;
+        const noise = Math.sin(x * 0.008 * state.patternScale + y * 0.008 * state.patternScale + state.time * 0.1);
+        return `hsl(${360 * t + noise * 50}, 80%, 50%)`;
+      }
+    };
+
+    function renderCanvas() {
+      const offscreenCanvas = document.createElement('canvas');
+      const offCtx = offscreenCanvas.getContext('2d', { alpha: false });
+      offscreenCanvas.width = state.width / 2; // Reduced resolution for performance
+      offscreenCanvas.height = state.height / 2;
+      const imageData = offCtx.createImageData(offscreenCanvas.width, offscreenCanvas.height);
+      const data = imageData.data;
+      const centerReal = -0.5;
+
+      for (let x = 0; x < offscreenCanvas.width; x++) {
+        for (let y = 0; y < offscreenCanvas.height; y++) {
+          let cx = (x - offscreenCanvas.width / 2 + state.centerX / 2) / state.zoom + centerReal;
+          let cy = (y - offscreenCanvas.height / 2 + state.centerY / 2) / state.zoom;
+          let zx = 0, zy = 0, i = 0;
+
+          for (let depth = 0; depth < state.compressionDepth; depth++) {
+            const scale = Math.pow(0.5, depth) * state.patternScale;
+            cx *= scale;
+            cy *= scale;
+            zx = 0; zy = 0; i = 0;
+
+            while (zx * zx + zy * zy < 4 && i < state.maxIter) {
+              const xtemp = zx * zx - zy * zy + cx;
+              zy = 2 * zx * zy + cy;
+              zx = xtemp;
+              i++;
+            }
+          }
+
+          const idx = (y * offscreenCanvas.width + x) * 4;
+          if (i === state.maxIter) {
+            data[idx] = data[idx + 1] = data[idx + 2] = 0; // Black for inside set
+          } else {
+            const color = colorsCanvas[state.colorScheme](i, x, y);
+            const [r, g, b] = hexToRgb(color);
+            data[idx] = r;
+            data[idx + 1] = g;
+            data[idx + 2] = b;
+          }
+          data[idx + 3] = 255;
+        }
+      }
+      offCtx.putImageData(imageData, 0, 0);
+      ctx.drawImage(offscreenCanvas, 0, 0, state.width, state.height);
+    }
+
+    function renderWebGL(timestamp = 0) {
+      const delta = (timestamp - state.time) / 1000;
+      state.time += delta * 0.1;
+
+      gl.uniform2fv(state.uniforms.center, [state.centerX, state.centerY]);
+      gl.uniform1f(state.uniforms.zoom, state.zoom);
+      gl.uniform1f(state.uniforms.time, state.time);
+      gl.uniform1i(state.uniforms.maxIterations, state.maxIter);
+      gl.uniform1i(state.uniforms.compressionDepth, state.compressionDepth);
+      gl.uniform1f(state.uniforms.patternScale, state.patternScale);
+      gl.uniform1i(state.uniforms.colorMode, ['nebula', 'fire', 'aurora', 'plasma', 'cosmic'].indexOf(state.colorScheme));
+
+      if (state.audioOn) {
+        const freq = 110 + Math.log2(state.zoom) * 10 + state.maxIter * 0.05;
+        startAudio(freq);
+      } else {
+        stopAudio();
+      }
+
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      state.animationFrame = requestAnimationFrame(renderWebGL);
+    }
+
+    // Helper: Convert HEX to RGB
+    function hexToRgb(hex) {
+      const r = parseInt(hex.slice(1, 3), 16);
+      const g = parseInt(hex.slice(3, 5), 16);
+      const b = parseInt(hex.slice(5, 7), 16);
+      return [r, g, b];
+    }
+
+    // Audio setup
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let oscillator = null;
+    function startAudio(frequency) {
+      if (!state.audioOn || oscillator) return;
+      oscillator = audioCtx.createOscillator();
+      oscillator.type = 'sine';
+      oscillator.frequency.value = frequency;
+      const gain = audioCtx.createGain();
+      gain.gain.value = 0.05;
+      oscillator.connect(gain);
+      gain.connect(audioCtx.destination);
+      oscillator.start();
+    }
+    function stopAudio() {
+      if (oscillator) {
+        oscillator.stop();
+        oscillator.disconnect();
+        oscillator = null;
+      }
+    }
+
+    // Debounce utility
+    function debounce(func, wait) {
+      let timeout;
+      return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), wait);
+      };
+    }
+
+    // Event handlers
+    function handleStart(e) {
+      e.preventDefault();
+      const time = Date.now();
+      if (time - state.lastTap < 300) { // Double-tap to reset
+        resetView();
+        return;
+      }
+      state.lastTap = time;
+      state.isDragging = true;
+      state.lastPos = getEventPosition(e);
+    }
+
+    function handleMove(e) {
+      e.preventDefault();
+      if (!state.isDragging || !state.lastPos) return;
+      const pos = getEventPosition(e);
+      const dx = (pos.x - state.lastPos.x) / state.zoom;
+      const dy = (pos.y - state.lastPos.y) / state.zoom;
+      state.centerX -= dx;
+      state.centerY -= dy;
+      state.velocity.x = dx * 10; // For inertia
+      state.velocity.y = dy * 10;
+      state.lastPos = pos;
+      if (isWebGL) gl.uniform2fv(state.uniforms.center, [state.centerX, state.centerY]);
+      animateInertia();
+    }
+
+    function handleEnd(e) {
+      e.preventDefault();
+      state.isDragging = false;
+      state.lastPos = null;
+    }
+
+    function handleWheel(e) {
+      e.preventDefault();
+      const zoomFactor = e.deltaY > 0 ? 1 / (1 + state.zoomSpeed * 0.1) : (1 + state.zoomSpeed * 0.1);
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+      state.centerX = mouseX - ((mouseX - state.centerX) * zoomFactor);
+      state.centerY = mouseY - ((mouseY - state.centerY) * zoomFactor);
+      state.zoom *= zoomFactor;
+      if (isWebGL) {
+        gl.uniform2fv(state.uniforms.center, [state.centerX, state.centerY]);
+        gl.uniform1f(state.uniforms.zoom, state.zoom);
+      }
+    }
+
+    // Get position from event (mouse or touch)
+    function getEventPosition(e) {
+      if (e.type.startsWith('touch')) {
+        const touch = e.touches[0];
+        return { x: touch.clientX, y: touch.clientY };
+      }
+      return { x: e.clientX, y: e.clientY };
+    }
+
+    // Inertia animation
+    function animateInertia() {
+      if (Math.abs(state.velocity.x) < 0.1 && Math.abs(state.velocity.y) < 0.1) return;
+      state.centerX += state.velocity.x;
+      state.centerY += state.velocity.y;
+      state.velocity.x *= 0.92;
+      state.velocity.y *= 0.92;
+      if (isWebGL) gl.uniform2fv(state.uniforms.center, [state.centerX, state.centerY]);
+      requestAnimationFrame(animateInertia);
+    }
+
+    // Keyboard controls
+    document.addEventListener('keydown', (e) => {
+      switch (e.key) {
+        case 'ArrowLeft': state.centerX += 50 / state.zoom; if (isWebGL) gl.uniform2fv(state.uniforms.center, [state.centerX, state.centerY]); break;
+        case 'ArrowRight': state.centerX -= 50 / state.zoom; if (isWebGL) gl.uniform2fv(state.uniforms.center, [state.centerX, state.centerY]); break;
+        case 'ArrowUp': state.centerY += 50 / state.zoom; if (isWebGL) gl.uniform2fv(state.uniforms.center, [state.centerX, state.centerY]); break;
+        case 'ArrowDown': state.centerY -= 50 / state.zoom; if (isWebGL) gl.uniform2fv(state.uniforms.center, [state.centerX, state.centerY]); break;
+        case '+': case '=': state.zoom *= (1 + state.zoomSpeed * 0.1); if (isWebGL) gl.uniform1f(state.uniforms.zoom, state.zoom); break;
+        case '-': case '_': state.zoom /= (1 + state.zoomSpeed * 0.1); if (isWebGL) gl.uniform1f(state.uniforms.zoom, state.zoom); break;
+        case 'r': resetView(); break;
+        case 't': toggleControls.classList.toggle('visible'); break;
+      }
+    });
+
+    // Control bindings with tooltips
+    function setupTooltips() {
+      const controls = document.querySelectorAll('.control-group input, .control-group select, button');
+      controls.forEach(control => {
+        const tooltipId = `${control.id}-tooltip`;
+        const tooltip = document.getElementById(tooltipId);
+        if (!tooltip) return;
+
+        control.addEventListener('mouseover', (e) => {
+          const rect = control.getBoundingClientRect();
+          tooltip.style.left = `${rect.left + rect.width + 5}px`;
+          tooltip.style.top = `${rect.top}px`;
+          tooltip.classList.add('visible');
+        });
+        control.addEventListener('mouseout', () => tooltip.classList.remove('visible'));
+        control.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          const rect = control.getBoundingClientRect();
+          tooltip.style.left = `${rect.left + rect.width + 5}px`;
+          tooltip.style.top = `${rect.top}px`;
+          tooltip.classList.add('visible');
+          setTimeout(() => tooltip.classList.remove('visible'), 2000);
+        });
+      });
+    }
+
+    ['iterations', 'compression-depth', 'color', 'zoom-speed', 'pattern-scale'].forEach(id => {
+      const element = document.getElementById(id);
+      element.addEventListener('input', (e) => {
+        const value = id.includes('depth') ? parseInt(e.target.value) : parseFloat(e.target.value);
+        state[id.replace('-', '')] = value;
+        if (!['zoom-speed', 'pattern-scale'].includes(id)) {
+          if (isWebGL) {
+            gl.uniform1i(state.uniforms.maxIterations, state.maxIter);
+            gl.uniform1i(state.uniforms.compressionDepth, state.compressionDepth);
+            gl.uniform1f(state.uniforms.patternScale, state.patternScale);
+          }
+        }
+      });
+    });
+
+    document.getElementById('color').addEventListener('change', (e) => {
+      state.colorScheme = e.target.value;
+      if (isWebGL) gl.uniform1i(state.uniforms.colorMode, ['nebula', 'fire', 'aurora', 'plasma', 'cosmic'].indexOf(state.colorScheme));
+    });
+
+    document.getElementById('audio-toggle').addEventListener('click', () => {
+      state.audioOn = !state.audioOn;
+      document.getElementById('audio-toggle').textContent = state.audioOn ? '🔊 On' : '🔇 Off';
+      if (!state.audioOn) stopAudio();
+    });
+
+    document.getElementById('reset').addEventListener('click', resetView);
+
+    function resetView() {
+      state.zoom = 300;
+      state.centerX = 0;
+      state.centerY = 0;
+      state.maxIter = 100;
+      state.compressionDepth = 1;
+      state.patternScale = 1;
+      state.colorScheme = 'nebula';
+      state.audioOn = true;
+      updateControls();
+      if (isWebGL) {
+        gl.uniform2fv(state.uniforms.center, [state.centerX, state.centerY]);
+        gl.uniform1f(state.uniforms.zoom, state.zoom);
+        gl.uniform1i(state.uniforms.maxIterations, state.maxIter);
+        gl.uniform1i(state.uniforms.compressionDepth, state.compressionDepth);
+        gl.uniform1f(state.uniforms.patternScale, state.patternScale);
+        gl.uniform1i(state.uniforms.colorMode, 0);
+      }
+      document.getElementById('audio-toggle').textContent = '🔊 On';
+    }
+
+    function updateControls() {
+      document.getElementById('iterations').value = state.maxIter;
+      document.getElementById('compression-depth').value = state.compressionDepth;
+      document.getElementById('color').value = state.colorScheme;
+      document.getElementById('zoom-speed').value = state.zoomSpeed;
+      document.getElementById('pattern-scale').value = state.patternScale;
+      document.getElementById('audio-toggle').textContent = state.audioOn ? '🔊 On' : '🔇 Off';
+    }
+
+    // Toggle controls
+    toggleControls.addEventListener('click', () => {
+      controls.classList.toggle('visible');
+    });
+
+    // Event listeners
+    canvas.addEventListener('mousedown', handleStart);
+    canvas.addEventListener('mousemove', handleMove);
+    canvas.addEventListener('mouseup', handleEnd);
+    canvas.addEventListener('mouseleave', handleEnd);
+    canvas.addEventListener('touchstart', handleStart);
+    canvas.addEventListener('touchmove', handleMove);
+    canvas.addEventListener('touchend', handleEnd);
+    canvas.addEventListener('wheel', handleWheel, { passive: false });
+
+    // Initialize
+    initCanvas();
+    setupTooltips();
+    if (isWebGL) {
+      renderWebGL();
+    } else {
+      setInterval(() => {
+        state.time += 0.016; // ~60 FPS
+        renderCanvas();
+      }, 16);
+    }
+  </script>
+</body>
+</html>
