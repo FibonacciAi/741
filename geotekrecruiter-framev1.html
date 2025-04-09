@@ -1,0 +1,2316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geotek Web3 Minikit Demo</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #2c5282; /* dark blue */
+      --primary-dark: #1a365d; /* darker blue */
+      --secondary-color: #4299e1; /* medium blue */
+      --secondary-light: #63b3ed; /* lighter blue */
+      --accent-color: #e53e3e; /* red accent for CTAs */
+      --accent-hover: #c53030; /* darker red */
+      --web3-color: #00ffc8; /* mint color for Web3 elements */
+      --web3-dark: #00d4a7; /* darker mint for hover effects */
+      --light-color: #f7fafc; /* off-white */
+      --light-accent: #edf2f7; /* slightly darker off-white */
+      --dark-color: #2d3748; /* dark grey */
+      --text-color: #4a5568; /* medium grey for text */
+      --text-light: #718096; /* lighter text */
+      --transition: all 0.3s ease;
+      --box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --border-radius: 0.5rem;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--light-color);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .web3-tabs {
+      display: flex;
+      border-bottom: 1px solid #e2e8f0;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .tab-button {
+      padding: 15px 25px;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-color);
+      cursor: pointer;
+      transition: var(--transition);
+      margin-right: 5px;
+    }
+
+    .tab-button:hover {
+      color: var(--primary-color);
+      border-bottom-color: var(--secondary-light);
+    }
+
+    .tab-button.active {
+      color: var(--primary-color);
+      border-bottom-color: var(--primary-color);
+    }
+
+    .tab-content {
+      display: none;
+      padding: 30px 0;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .two-column {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .column {
+      flex: 1 1 400px;
+    }
+
+    .feature-list {
+      list-style: none;
+      margin: 20px 0;
+    }
+
+    .feature-list li {
+      margin-bottom: 15px;
+      padding-left: 30px;
+      position: relative;
+    }
+
+    .feature-list li:before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--secondary-color);
+      font-weight: bold;
+    }
+
+    .demo-frame {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      overflow: hidden;
+      height: 600px;
+      position: relative;
+    }
+
+    .frame-header {
+      background-color: #f1f5f9;
+      padding: 15px;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .frame-title {
+      font-weight: 600;
+      color: var(--dark-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .frame-actions {
+      display: flex;
+      gap: 15px;
+    }
+
+    .frame-action {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .frame-action.red {
+      background-color: #f87171;
+    }
+
+    .frame-action.yellow {
+      background-color: #fbbf24;
+    }
+
+    .frame-action.green {
+      background-color: #34d399;
+    }
+
+    .frame-body {
+      padding: 20px;
+      height: calc(100% - 60px);
+      overflow: auto;
+    }
+
+    /* Recruiter View - Job Post Frame */
+    .job-card {
+      background: #1e1e1e;
+      padding: 2rem;
+      border-radius: 12px;
+      color: #eee;
+      text-align: center;
+      margin: 0 auto;
+      max-width: 500px;
+    }
+
+    .job-card h1 {
+      font-size: 1.5rem;
+      color: var(--web3-color);
+      margin-bottom: 15px;
+    }
+
+    .job-card p {
+      font-size: 1rem;
+      line-height: 1.4;
+      margin-bottom: 20px;
+    }
+
+    .btn-apply {
+      background: var(--web3-color);
+      color: #000;
+      font-weight: bold;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-apply:hover {
+      background: var(--web3-dark);
+      transform: translateY(-2px);
+    }
+
+    /* Candidate View - Profile Form */
+    .profile-form {
+      background: #0c0c0c;
+      color: #f8f8f2;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 500px;
+      margin: 0 auto;
+      font-family: monospace;
+    }
+
+    .profile-form h2 {
+      color: var(--web3-color);
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.6rem;
+      background: #1e1e1e;
+      border: 1px solid #444;
+      color: #fff;
+      border-radius: 5px;
+      font-family: monospace;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .btn-submit {
+      background: var(--web3-color);
+      border: none;
+      color: #000;
+      padding: 0.8rem 1.5rem;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: monospace;
+    }
+
+    .btn-submit:hover {
+      background: var(--web3-dark);
+      transform: translateY(-2px);
+    }
+
+    /* Admin Dashboard */
+    .dashboard {
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .dashboard-header {
+      background: #1e293b;
+      padding: 15px 20px;
+      border-bottom: 1px solid #334155;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .dashboard-title {
+      font-weight: 600;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .dashboard-stats {
+      display: flex;
+      gap: 20px;
+    }
+
+    .stat {
+      background: #334155;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .stat i {
+      color: var(--web3-color);
+    }
+
+    .dashboard-body {
+      padding: 20px;
+    }
+
+    .candidate-list {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .candidate-list th {
+      text-align: left;
+      padding: 12px 15px;
+      background: #1e293b;
+      color: #e2e8f0;
+      font-weight: 500;
+    }
+
+    .candidate-list td {
+      padding: 10px 15px;
+      border-top: 1px solid #334155;
+    }
+
+    .candidate-list tr:hover {
+      background: #1e293b;
+    }
+
+    .status {
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      text-align: center;
+      display: inline-block;
+    }
+
+    .status.new {
+      background: #0ea5e9;
+      color: white;
+    }
+
+    .status.reviewing {
+      background: #eab308;
+      color: #1e293b;
+    }
+
+    .status.hired {
+      background: #22c55e;
+      color: white;
+    }
+
+    .address {
+      font-family: monospace;
+      font-size: 14px;
+    }
+
+    .action-btn {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 16px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .action-btn:hover {
+      color: white;
+    }
+
+    /* Technical Section */
+    .tech-section {
+      margin-bottom: 30px;
+    }
+
+    .tech-section h3 {
+      font-size: 1.2rem;
+      color: var(--primary-color);
+      margin-bottom: 15px;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 10px;
+    }
+
+    .code-block {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: monospace;
+      line-height: 1.5;
+    }
+
+    .code-block .comment {
+      color: #94a3b8;
+    }
+
+    .code-block .keyword {
+      color: #f472b6;
+    }
+
+    .code-block .string {
+      color: #a5e9c7;
+    }
+
+    .code-block .function {
+      color: #60a5fa;
+    }
+
+    .code-block .variable {
+      color: #f59e0b;
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+      margin: 30px 0;
+      padding-left: 40px;
+    }
+
+    .timeline:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 4px;
+      background: var(--secondary-light);
+      border-radius: 2px;
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 30px;
+    }
+
+    .timeline-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .timeline-item:before {
+      content: '';
+      position: absolute;
+      left: -45px;
+      top: 0;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--secondary-color);
+      border: 3px solid var(--light-color);
+    }
+
+    .timeline-title {
+      font-weight: 600;
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: var(--primary-color);
+    }
+
+    .timeline-content {
+      line-height: 1.6;
+    }
+
+    /* Badges and tags */
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .badge {
+      background: #f1f5f9;
+      color: var(--primary-color);
+      padding: 5px 12px;
+      border-radius: 15px;
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .badge i {
+      font-size: 12px;
+    }
+
+    .badge.web3 {
+      background: rgba(0, 255, 200, 0.15);
+      color: #00b894;
+    }
+
+    .cta-container {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .cta-btn {
+      background: var(--primary-color);
+      color: white;
+      padding: 12px 25px;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+      transition: var(--transition);
+    }
+
+    .cta-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--box-shadow);
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      .tab-button {
+        padding: 12px 15px;
+        font-size: 14px;
+      }
+
+      .two-column {
+        flex-direction: column;
+      }
+
+      .column {
+        flex: 1 1 100%;
+      }
+
+      .demo-frame {
+        height: 550px;
+      }
+      
+      .dashboard-stats {
+        display: none;
+      }
+      
+      .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      
+      .candidate-list {
+        font-size: 14px;
+      }
+      
+      .candidate-list th:nth-child(2),
+      .candidate-list td:nth-child(2) {
+        display: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header h1 {
+        font-size: 1.8rem;
+      }
+      
+      .header p {
+        font-size: 1rem;
+      }
+      
+      .web3-tabs {
+        justify-content: center;
+      }
+      
+      .tab-button {
+        padding: 10px;
+        font-size: 12px;
+        flex: 1 1 auto;
+        text-align: center;
+      }
+      
+      .candidate-list th:nth-child(3),
+      .candidate-list td:nth-child(3) {
+        display: none;
+      }
+    }
+
+    /* Blockchain network animation */
+    .network-animation {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      z-index: 10;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .network-animation.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .network-animation h3 {
+      margin-bottom: 20px;
+      color: var(--web3-color);
+    }
+
+    .nodes {
+      position: relative;
+      width: 250px;
+      height: 250px;
+    }
+
+    .node {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: var(--web3-color);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--web3-color);
+    }
+
+    .node-1 { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+    .node-2 { top: 20%; left: 30%; }
+    .node-3 { top: 80%; left: 30%; }
+    .node-4 { top: 20%; left: 70%; }
+    .node-5 { top: 80%; left: 70%; }
+
+    .connection {
+      position: absolute;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--web3-color), transparent);
+      animation: pulse 1.5s infinite;
+      transform-origin: left center;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.3; }
+      50% { opacity: 1; }
+      100% { opacity: 0.3; }
+    }
+
+    .status-text {
+      margin-top: 20px;
+      font-family: monospace;
+    }
+
+    .dots {
+      display: inline-block;
+    }
+
+    .dots:after {
+      content: '.';
+      animation: dots 1.5s steps(5, end) infinite;
+    }
+
+    @keyframes dots {
+      0%, 20% { content: '.'; }
+      40% { content: '..'; }
+      60% { content: '...'; }
+      80%, 100% { content: ''; }
+    }
+
+    /* Footer styles */
+    .footer {
+      background-color: var(--light-accent);
+      color: var(--text-light);
+      padding: 30px 0;
+      text-align: center;
+      margin-top: 50px;
+      border-top: 1px solid #e2e8f0;
+      font-size: 0.9rem;
+    }
+
+    .footer a {
+      color: var(--secondary-color);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer a:hover {
+      color: var(--secondary-light);
+    }
+
+    .social-links {
+      margin-top: 15px;
+    }
+
+    .social-links a {
+      display: inline-block;
+      margin: 0 10px;
+      font-size: 1.2rem;
+    }
+
+    /* Additional styling for better visual hierarchy */
+    h2 {
+      font-size: 2rem;
+      color: var(--primary-color);
+      margin-bottom: 20px;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      color: var(--secondary-color);
+      margin-bottom: 15px;
+    }
+
+    p {
+      margin-bottom: 20px;
+    }
+    
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal.active {
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 30px;
+      border-radius: var(--border-radius);
+      max-width: 500px;
+      width: 90%;
+      position: relative;
+      box-shadow: var(--box-shadow);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text-light);
+      transition: var(--transition);
+    }
+
+    .modal-close:hover {
+      color: var(--accent-color);
+    }
+
+    .modal-title {
+      margin-bottom: 20px;
+      color: var(--primary-color);
+      font-size: 1.5rem;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    /* Web3 wallet connect button */
+    .wallet-connect {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .wallet-connect:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(107, 70, 193, 0.2);
+    }
+
+    .wallet-connect i {
+      font-size: 18px;
+    }
+
+    /* Notification toast */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: white;
+      padding: 15px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateY(150%);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+    }
+
+    .toast-icon {
+      color: var(--web3-color);
+      font-size: 20px;
+    }
+
+    .toast-text {
+      color: var(--dark-color);
+    }
+
+    /* Progress bar for loading states */
+    .progress-bar {
+      height: 4px;
+      background-color: #e2e8f0;
+      margin: 20px 0;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 100%;
+      background-color: var(--web3-color);
+      width: 0;
+      transition: width 0.5s ease;
+    }
+
+    /* Interactive job form */
+    .job-form {
+      display: none;
+      background: #1e1e1e;
+      padding: 25px;
+      border-radius: 12px;
+      color: white;
+    }
+
+    .job-form.active {
+      display: block;
+    }
+
+    .section-toggle {
+      padding: 10px 0;
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      color: var(--web3-color);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      border-bottom: 1px solid #333;
+    }
+
+    .section-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .section-content.active {
+      max-height: 500px;
+      padding-top: 15px;
+    }
+
+    /* Skill tags */
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .skill-tag {
+      background-color: rgba(0, 255, 200, 0.15);
+      color: var(--web3-color);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .skill-tag i {
+      cursor: pointer;
+    }
+
+    /* Tooltips */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .tooltip-text {
+      visibility: hidden;
+      width: 200px;
+      background-color: #2d3748;
+      color: white;
+      text-align: center;
+      border-radius: 6px;
+      padding: 8px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 14px;
+      pointer-events: none;
+    }
+
+    .tooltip-text::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #2d3748 transparent transparent transparent;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>Geotek Web3 Minikit Demo</h1>
+      <p>Explore the future of recruitment with our Web3-powered minikit, leveraging Farcaster and blockchain technology for a more trusted and efficient hiring process.</p>
+    </header>
+
+    <div class="web3-tabs">
+      <button class="tab-button active" data-tab="overview">Overview</button>
+      <button class="tab-button" data-tab="recruiter">Recruiter View</button>
+      <button class="tab-button" data-tab="candidate">Candidate View</button>
+      <button class="tab-button" data-tab="admin">Admin Dashboard</button>
+      <button class="tab-button" data-tab="technical">Technical Details</button>
+    </div>
+
+    <div class="tab-content active" id="overview">
+      <div class="two-column">
+        <div class="column">
+          <h2>Introducing Farcaster Recruit</h2>
+          <p>Merge 30+ years of trusted recruitment expertise with Web3 technology to establish a platform that builds trust, speeds up hiring, and verifies candidate credentials with blockchain immutability.</p>
+
+          <div class="badges">
+            <span class="badge web3"><i class="fas fa-wallet"></i> Wallet Verification</span>
+            <span class="badge web3"><i class="fas fa-cubes"></i> On-Chain Credentials</span>
+            <span class="badge web3"><i class="fas fa-link"></i> Farcaster Frames</span>
+            <span class="badge web3"><i class="fas fa-users"></i> Social Graph Sourcing</span>
+          </div>
+
+          <h3>Key Benefits</h3>
+          <ul class="feature-list">
+            <li><strong>Enhanced Trust:</strong> Blockchain-verified candidate information ensures accuracy and prevents fraud</li>
+            <li><strong>Speed & Efficiency:</strong> Reduce verification times from days to minutes with automated credential checks</li>
+            <li><strong>Web3 Network:</strong> Source candidates directly from decentralized social graphs like Farcaster</li>
+            <li><strong>On-Chain History:</strong> View verifiable work history, credentials, and contributions to open source projects</li>
+            <li><strong>Privacy Control:</strong> Candidates maintain ownership of their data with selective disclosure</li>
+          </ul>
+
+          <div class="timeline">
+            <div class="timeline-item">
+              <h4 class="timeline-title">Phase 1: MVP Launch</h4>
+              <div class="timeline-content">
+                Deploy basic Farcaster Frames for job posting and applications with wallet verification and on-chain event logging.
+              </div>
+            </div>
+            <div class="timeline-item">
+              <h4 class="timeline-title">Phase 2: Expand Features</h4>
+              <div class="timeline-content">
+                Add social graph sourcing, token-gated job boards, on-chain reputation tracking, and zk-attestations for skill proofs.
+              </div>
+            </div>
+            <div class="timeline-item">
+              <h4 class="timeline-title">Phase 3: Full Integration</h4>
+              <div class="timeline-content">
+                Complete integration with Geotek's existing systems, expanding to multi-chain support and decentralized identity verification.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="demo-frame">
+            <div class="frame-header">
+              <div class="frame-title">
+                <i class="fas fa-globe"></i> Farcaster Recruit Demo
+              </div>
+              <div class="frame-actions">
+                <div class="frame-action red"></div>
+                <div class="frame-action yellow"></div>
+                <div class="frame-action green"></div>
+              </div>
+            </div>
+            <div class="frame-body">
+              <iframe id="demo-iframe" src="about:blank" width="100%" height="100%" frameborder="0"></iframe>
+
+              <div class="network-animation" id="network-animation">
+                <h3>Verifying On Blockchain</h3>
+                <div class="nodes">
+                  <div class="node node-1"></div>
+                  <div class="node node-2"></div>
+                  <div class="node node-3"></div>
+                  <div class="node node-4"></div>
+                  <div class="node node-5"></div>
+
+                  <div class="connection" style="width: 100px; top: 30px; left: 40px; transform: rotate(45deg);"></div>
+                  <div class="connection" style="width: 100px; top: 220px; left: 40px; transform: rotate(-45deg);"></div>
+                  <div class="connection" style="width: 100px; top: 30px; left: 170px; transform: rotate(-45deg);"></div>
+                  <div class="connection" style="width: 100px; top: 220px; left: 170px; transform: rotate(45deg);"></div>
+                </div>
+                <div class="status-text">
+                  Processing transaction <span class="dots"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cta-container">
+            <a href="#" class="cta-btn" id="demo-trigger">Launch Interactive Demo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="recruiter">
+      <div class="two-column">
+        <div class="column">
+          <h2>Recruiter Experience</h2>
+          <p>Post jobs directly to the Farcaster network and receive applications with verified credentials and blockchain-backed employment history. No more manual verification or reference checks.</p>
+
+          <h3>Key Features for Recruiters</h3>
+          <ul class="feature-list">
+            <li><strong>One-Click Job Posting:</strong> Create a Farcaster Frame that spreads virally across the network</li>
+            <li><strong>Smart Contract Integration:</strong> Define job requirements as code with automatic verification</li>
+            <li><strong>Verified Applications:</strong> All applications are wallet-signed and credentials verified on-chain</li>
+            <li><strong>Social Reach Analytics:</strong> Track how your job posting spreads through Web3 social networks</li>
+            <li><strong>Automated Shortlisting:</strong> Set transparent criteria that candidates can see and trust</li>
+          </ul>
+
+          <h3>How It Works</h3>
+          <ol style="margin-left: 20px; margin-top: 15px;">
+            <li>Create a job posting specifying required skills, experience, and compensation</li>
+            <li>System generates a Farcaster Frame that can be cast to the network</li>
+            <li>When shared, the Frame allows one-click applications with wallet verification</li>
+            <li>Candidates submit applications with verifiable credentials</li>
+            <li>Review applications with confidence in their authenticity</li>
+          </ol>
+
+          <div class="badges" style="margin-top: 30px;">
+            <span class="badge"><i class="fas fa-bolt"></i> Speed Up Hiring 3x</span>
+            <span class="badge"><i class="fas fa-shield-alt"></i> Reduce Fraud Risk</span>
+            <span class="badge"><i class="fas fa-network-wired"></i> Tap Web3 Talent Pool</span>
+          </div>
+        </div>
+        <div class="column">
+          <div class="demo-frame">
+            <div class="frame-header">
+              <div class="frame-title">
+                <i class="fas fa-briefcase"></i> Recruiter: Job Post Frame
+              </div>
+              <div class="frame-actions">
+                <div class="frame-action red"></div>
+                <div class="frame-action yellow"></div>
+                <div class="frame-action green"></div>
+              </div>
+            </div>
+            <div class="frame-body" style="background-color: #111; display: flex; align-items: center; justify-content: center;">
+              <div class="job-card">
+                <h1>Join Our Web3 Team</h1>
+                <p>We're hiring a Frontend Engineer to help build decentralized apps using Frames v2. Remote. Token comp. Open-source impact.</p>
+                <button class="btn-apply" id="apply-btn">Apply Now</button>
+              </div>
+
+              <div class="job-form" id="create-job-form">
+                <h2 style="color: var(--web3-color); margin-bottom: 20px;">Create Job Posting</h2>
+                <form id="recruiter-job-form">
+                  <div class="form-group">
+                    <label for="job-title">Job Title</label>
+                    <input type="text" id="job-title" required placeholder="e.g., Frontend Developer, Solidity Engineer">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="job-description">Job Description</label>
+                    <textarea id="job-description" required placeholder="Describe the role, responsibilities, and requirements"></textarea>
+                  </div>
+                  
+                  <button type="button" class="section-toggle">
+                    Skills & Requirements
+                    <i class="fas fa-chevron-down"></i>
+                  </button>
+                  <div class="section-content">
+                    <div class="form-group">
+                      <label for="skill-input">Add Required Skills</label>
+                      <div style="display: flex; gap: 10px;">
+                        <input type="text" id="skill-input" placeholder="e.g., React, Solidity">
+                        <button type="button" id="add-skill" style="background: #333; color: white; border: none; padding: 0 15px; border-radius: 4px; cursor: pointer;">
+                          <i class="fas fa-plus"></i>
+                        </button>
+                      </div>
+                      <div class="skill-tags" id="skill-tags"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                      <label for="experience">Years of Experience</label>
+                      <select id="experience" style="width: 100%; padding: 0.6rem; background: #1e1e1e; border: 1px solid #444; color: #fff; border-radius: 5px;">
+                        <option value="entry">Entry Level (0-2 years)</option>
+                        <option value="mid">Mid Level (3-5 years)</option>
+                        <option value="senior">Senior (5+ years)</option>
+                        <option value="lead">Lead/Architect (8+ years)</option>
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <button type="button" class="section-toggle">
+                    Compensation & Benefits
+                    <i class="fas fa-chevron-down"></i>
+                  </button>
+                  <div class="section-content">
+                    <div class="form-group">
+                      <label for="salary-range">Salary Range</label>
+                      <select id="salary-range" style="width: 100%; padding: 0.6rem; background: #1e1e1e; border: 1px solid #444; color: #fff; border-radius: 5px;">
+                        <option value="competitive">Competitive</option>
+                        <option value="50-80k">$50,000 - $80,000</option>
+                        <option value="80-120k">$80,000 - $120,000</option>
+                        <option value="120-180k">$120,000 - $180,000</option>
+                        <option value="180k+">$180,000+</option>
+                      </select>
+                    </div>
+                    
+                    <div class="form-group">
+                      <label>Token Compensation</label>
+                      <div style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" id="token-comp" style="width: auto;">
+                        <label for="token-comp" style="display: inline; margin: 0;">Include token/equity compensation</label>
+                      </div>
+                    </div>
+                    
+                    <div class="form-group">
+                      <label>Benefits</label>
+                      <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                          <input type="checkbox" id="remote" style="width: auto;" checked>
+                          <label for="remote" style="display: inline; margin: 0;">Remote work</label>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                          <input type="checkbox" id="flexible" style="width: auto;" checked>
+                          <label for="flexible" style="display: inline; margin: 0;">Flexible hours</label>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                          <input type="checkbox" id="healthcare" style="width: auto;">
+                          <label for="healthcare" style="display: inline; margin: 0;">Healthcare</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <button type="button" class="section-toggle">
+                    Web3 Integration
+                    <i class="fas fa-chevron-down"></i>
+                  </button>
+                  <div class="section-content">
+                    <div class="form-group">
+                      <label>Verify Candidate Requirements On-Chain</label>
+                      <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                          <input type="checkbox" id="verify-wallet" style="width: auto;" checked>
+                          <label for="verify-wallet" style="display: inline; margin: 0;">Wallet verification</label>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                          <input type="checkbox" id="verify-fid" style="width: auto;" checked>
+                          <label for="verify-fid" style="display: inline; margin: 0;">Farcaster ID (FID)</label>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                          <input type="checkbox" id="verify-github" style="width: auto;">
+                          <label for="verify-github" style="display: inline; margin: 0;">GitHub contributions</label>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                          <input type="checkbox" id="verify-poap" style="width: auto;">
+                          <label for="verify-poap" style="display: inline; margin: 0;">POAP/NFT credentials</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group" style="margin-top: 25px;">
+                    <button type="submit" class="btn-submit">Create & Publish Job Posting</button>
+                  </div>
+                </form>
+              </div>
+
+              <div class="network-animation" id="recruiter-animation">
+                <h3>Publishing to Farcaster</h3>
+                <div class="nodes">
+                  <div class="node node-1"></div>
+                  <div class="node node-2"></div>
+                  <div class="node node-3"></div>
+                  <div class="node node-4"></div>
+                  <div class="node node-5"></div>
+
+                  <div class="connection" style="width: 100px; top: 30px; left: 40px; transform: rotate(45deg);"></div>
+                  <div class="connection" style="width: 100px; top: 220px; left: 40px; transform: rotate(-45deg);"></div>
+                  <div class="connection" style="width: 100px; top: 30px; left: 170px; transform: rotate(-45deg);"></div>
+                  <div class="connection" style="width: 100px; top: 220px; left: 170px; transform: rotate(45deg);"></div>
+                </div>
+                <div class="status-text">
+                  Broadcasting to network <span class="dots"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cta-container">
+            <a href="#" class="cta-btn" id="create-job-btn">Create New Job Posting</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="candidate">
+      <div class="two-column">
+        <div class="column">
+          <h2>Candidate Experience</h2>
+          <p>Apply to jobs with a single click using your verified wallet and blockchain credentials. Your Web3 reputation speaks for itself.</p>
+
+          <h3>Key Features for Candidates</h3>
+          <ul class="feature-list">
+            <li><strong>Self-Sovereign Identity:</strong> Own your professional data and control who can access it</li>
+            <li><strong>Verified Credentials:</strong> Prove your skills with on-chain attestations from trusted sources</li>
+            <li><strong>One-Click Applications:</strong> Apply to jobs directly through Farcaster with your connected wallet</li>
+            <li><strong>Portable Reputation:</strong> Your work history and achievements follow you across the Web3 ecosystem</li>
+            <li><strong>Transparent Process:</strong> See exactly where you stand in the hiring process at all times</li>
+          </ul>
+
+          <h3>Supported Credentials</h3>
+          <div class="badges" style="margin-top: 15px;">
+            <span class="badge web3 tooltip">
+              <i class="fas fa-code-branch"></i> GitHub Contributions
+              <span class="tooltip-text">Link your GitHub account to verify contributions to open-source projects</span>
+            </span>
+            <span class="badge web3 tooltip">
+              <i class="fas fa-certificate"></i> POAPs & NFT Badges
+              <span class="tooltip-text">Show off event attendance and achievement tokens from Web3 events</span>
+            </span>
+            <span class="badge web3 tooltip">
+              <i class="fas fa-graduation-cap"></i> Edu Credentials
+              <span class="tooltip-text">Verifiable education certificates and course completions</span>
+            </span>
+            <span class="badge web3 tooltip">
+              <i class="fas fa-award"></i> Work History
+              <span class="tooltip-text">On-chain attestations from previous employers</span>
+            </span>
+            <span class="badge web3 tooltip">
+              <i class="fas fa-file-signature"></i> zk-Attestations
+              <span class="tooltip-text">Zero-knowledge proofs that verify credentials without revealing sensitive data</span>
+            </span>
+            <span class="badge web3 tooltip">
+              <i class="fas fa-comment"></i> Farcaster Reputation
+              <span class="tooltip-text">Reputation derived from your Farcaster social graph and content</span>
+            </span>
+          </div>
+
+          <div style="margin-top: 30px;">
+            <h3>Benefits for Candidates</h3>
+            <p>Unlike traditional job applications that require repetitive form-filling and manual verification, Farcaster Recruit offers a streamlined experience:</p>
+            <ul class="feature-list" style="margin-top: 15px;">
+              <li>Apply to multiple jobs with consistent verified information</li>
+              <li>Maintain privacy while proving your qualifications</li>
+              <li>Build a portable professional identity that travels with you</li>
+              <li>Receive fair consideration based on verifiable achievements</li>
+            </ul>
+          </div>
+        </div>
+        <div class="column">
+          <div class="demo-frame">
+            <div class="frame-header">
+              <div class="frame-title">
+                <i class="fas fa-user-circle"></i> Candidate: Application Frame
+              </div>
+              <div class="frame-actions">
+                <div class="frame-action red"></div>
+                <div class="frame-action yellow"></div>
+                <div class="frame-action green"></div>
+              </div>
+            </div>
+            <div class="frame-body" style="background-color: #0c0c0c; padding: 0;">
+              <div class="profile-form">
+                <h2>Candidate Profile</h2>
+                <form id="candidate-form">
+                  <div class="form-group">
+                    <label for="wallet">Wallet Address</label>
+                    <div style="display: flex; gap: 10px;">
+                      <input type="text" id="wallet" name="wallet" placeholder="0xABC..." required readonly>
+                      <button type="button" id="connect-wallet" style="background: #333; color: white; border: none; padding: 0 15px; border-radius: 4px; cursor: pointer;">
+                        <i class="fas fa-link"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="farcaster_id">Farcaster ID (FID)</label>
+                    <div style="display: flex; gap: 10px;">
+                      <input type="text" id="farcaster_id" name="farcaster_id" placeholder="e.g., 12345" readonly>
+                      <button type="button" id="verify-farcaster" style="background: #333; color: white; border: none; padding: 0 15px; border-radius: 4px; cursor: pointer;">
+                        <i class="fas fa-check-circle"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="github">Linked GitHub Profile</label>
+                    <div style="display: flex; gap: 10px;">
+                      <input type="text" id="github" name="github" placeholder="https://github.com/you">
+                      <button type="button" id="verify-github" style="background: #333; color: white; border: none; padding: 0 15px; border-radius: 4px; cursor: pointer;">
+                        <i class="fas fa-link"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="linkedin">LinkedIn Profile (Optional)</label>
+                    <input type="text" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/you">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="skills">Skills (Separate by comma)</label>
+                    <input type="text" id="skills" name="skills" placeholder="e.g., React, Solidity, Project Management">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="experience">Relevant Experience</label>
+                    <textarea id="experience" name="experience" placeholder="Summarize your relevant work experience"></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <button type="button" id="import-credentials" class="wallet-connect">
+                      <i class="fas fa-file-import"></i> Import On-Chain Credentials
+                    </button>
+                    <div class="progress-bar" id="import-progress" style="display: none;">
+                      <div class="progress" id="progress-bar"></div>
+                    </div>
+                  </div>
+
+                  <button type="submit" class="btn-submit">Submit Application</button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="cta-container">
+            <a href="#" class="cta-btn" id="view-jobs-btn">View Available Jobs</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="admin">
+      <div class="dashboard">
+        <div class="dashboard-header">
+          <h3 class="dashboard-title">
+            <i class="fas fa-tachometer-alt"></i> Admin Dashboard
+          </h3>
+          <div class="dashboard-stats">
+            <span class="stat"><i class="fas fa-file-alt"></i> 12 New Applications</span>
+            <span class="stat"><i class="fas fa-user-check"></i> 5 Candidates Reviewed</span>
+            <span class="stat"><i class="fas fa-user-plus"></i> 2 Hires Made</span>
+          </div>
+        </div>
+        <div class="dashboard-body">
+          <h3>Recent Applications</h3>
+          <table class="candidate-list">
+            <thead>
+              <tr>
+                <th>Candidate</th>
+                <th>Wallet Address</th>
+                <th>Applied Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Alice Wonderland</td>
+                <td class="address">0x123...abc</td>
+                <td>2025-04-09</td>
+                <td><span class="status new">New</span></td>
+                <td>
+                  <button class="action-btn view-candidate" data-id="1"><i class="fas fa-eye"></i></button>
+                  <button class="action-btn approve-candidate" data-id="1"><i class="fas fa-check"></i></button>
+                  <button class="action-btn reject-candidate" data-id="1"><i class="fas fa-times"></i></button>
+                </td>
+              </tr>
+              <tr>
+                <td>Bob The Builder</td>
+                <td class="address">0x456...def</td>
+                <td>2025-04-08</td>
+                <td><span class="status reviewing">Reviewing</span></td>
+                <td>
+                  <button class="action-btn view-candidate" data-id="2"><i class="fas fa-eye"></i></button>
+                  <button class="action-btn approve-candidate" data-id="2"><i class="fas fa-check"></i></button>
+                  <button class="action-btn reject-candidate" data-id="2"><i class="fas fa-times"></i></button>
+                </td>
+              </tr>
+              <tr>
+                <td>Charlie Chaplin</td>
+                <td class="address">0x789...ghi</td>
+                <td>2025-04-07</td>
+                <td><span class="status hired">Hired</span></td>
+                <td>
+                  <button class="action-btn view-candidate" data-id="3"><i class="fas fa-eye"></i></button>
+                  <button class="action-btn"><i class="fas fa-user-minus"></i></button>
+                </td>
+              </tr>
+              <tr>
+                <td>Diana Prince</td>
+                <td class="address">0xabc...123</td>
+                <td>2025-04-06</td>
+                <td><span class="status new">New</span></td>
+                <td>
+                  <button class="action-btn view-candidate" data-id="4"><i class="fas fa-eye"></i></button>
+                  <button class="action-btn approve-candidate" data-id="4"><i class="fas fa-check"></i></button>
+                  <button class="action-btn reject-candidate" data-id="4"><i class="fas fa-times"></i></button>
+                </td>
+              </tr>
+              <tr>
+                <td>Eve Harrington</td>
+                <td class="address">0xdef...456</td>
+                <td>2025-04-05</td>
+                <td><span class="status reviewing">Reviewing</span></td>
+                <td>
+                  <button class="action-btn view-candidate" data-id="5"><i class="fas fa-eye"></i></button>
+                  <button class="action-btn approve-candidate" data-id="5"><i class="fas fa-check"></i></button>
+                  <button class="action-btn reject-candidate" data-id="5"><i class="fas fa-times"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="technical">
+      <div class="tech-section">
+        <h3>Farcaster Frame Integration</h3>
+        <p>Our minikit leverages Farcaster Frames to create interactive job postings and application forms directly within the Farcaster feed. This allows for seamless user experience and viral distribution of job opportunities.</p>
+        <div class="code-block">
+          <pre><code class="language-html">&lt;!-- Farcaster Frame example -->
+&lt;iframe
+  src="https://farcaster.network/embed/frame?id=job-123&type=application"
+  width="600"
+  height="300"
+  frameborder="0"
+&gt;&lt;/iframe&gt;
+
+&lt;!-- Frames v2 spec response -->
+&lt;meta property="fc:frame" content="vNext" /&gt;
+&lt;meta property="fc:frame:image" content="https://geotek.com/job-post-123.png" /&gt;
+&lt;meta property="fc:frame:button:1" content="Apply Now" /&gt;
+&lt;meta property="fc:frame:button:1:action" content="post_redirect" /&gt;
+&lt;meta property="fc:frame:post_url" content="https://geotek.com/api/apply?jobId=123" /&gt;</code></pre>
+        </div>
+      </div>
+
+      <div class="tech-section">
+        <h3>Wallet Verification</h3>
+        <p>We use cryptographic signatures to verify the ownership of candidate wallets, ensuring the authenticity of their applications and linked credentials.</p>
+        <div class="code-block">
+          <pre><code class="language-javascript">// Example JavaScript snippet for wallet verification
+import { ethers } from 'ethers';
+
+async function verifySignature(address, signature, message) {
+  try {
+    // Recover the address of the signer
+    const signer = ethers.verifyMessage(message, signature);
+    
+    // Check if the recovered address matches the claimed address
+    return signer.toLowerCase() === address.toLowerCase();
+  } catch (error) {
+    console.error("Signature verification failed:", error);
+    return false;
+  }
+}
+
+// Example usage in application flow
+async function handleApplicationSubmit(candidateData) {
+  const { walletAddress, signature, message } = candidateData;
+  
+  // First verify wallet ownership
+  const isVerified = await verifySignature(walletAddress, signature, message);
+  
+  if (!isVerified) {
+    throw new Error("Wallet verification failed");
+  }
+  
+  // Proceed with application submission if verified
+  return submitApplication(candidateData);
+}</code></pre>
+        </div>
+      </div>
+
+      <div class="tech-section">
+        <h3>On-Chain Credentials</h3>
+        <p>Candidates can link their on-chain credentials, such as POAPs, NFTs representing skills, and verifiable work history stored on the blockchain. This provides recruiters with tamper-proof information.</p>
+        <div class="code-block">
+          <pre><code class="language-json">{
+  "candidate": "0x123abc456def789ghi",
+  "credentialSchema": "ipfs://Qm123456789abcdef",
+  "credentials": [
+    {
+      "type": "POAP",
+      "contractAddress": "0x22C1f6050E56d2876009903609a2cC3fEf83B415",
+      "tokenId": "123456",
+      "eventName": "ETHGlobal London 2025",
+      "issuedAt": "2025-02-15T00:00:00Z",
+      "verified": true
+    },
+    {
+      "type": "NFT Badge",
+      "contractAddress": "0x7Be8076f4EA4A4AD08075C2508e481d6C946D12b",
+      "tokenId": "789012",
+      "issuer": "Web3 Skills Certification DAO",
+      "description": "Certified Solidity Developer - Level 3",
+      "issuedAt": "2024-11-10T00:00:00Z",
+      "expiresAt": "2026-11-10T00:00:00Z",
+      "verified": true
+    },
+    {
+      "type": "zkAttestation",
+      "attestationId": "0x9876543210fedcba",
+      "issuer": "Ethereum Foundation",
+      "skills": ["Cryptography", "ZK Proofs", "Protocol Design"],
+      "proofHash": "0xabcdef1234567890",
+      "issuedAt": "2024-12-05T00:00:00Z",
+      "verified": true
+    },
+    {
+      "type": "WorkHistory",
+      "employer": "ConsenSys",
+      "role": "Smart Contract Engineer",
+      "startDate": "2023-06-01T00:00:00Z",
+      "endDate": "2024-10-31T00:00:00Z",
+      "attestationHash": "0x1a2b3c4d5e6f7g8h9i",
+      "verifiedBy": "0x123456789abcdef123456789abcdef",
+      "verified": true
+    }
+  ]
+}</code></pre>
+        </div>
+      </div>
+
+      <div class="tech-section">
+        <h3>Smart Contract Integration</h3>
+        <p>Our platform integrates with smart contracts to manage job postings, applications, and credential verification in a fully decentralized manner.</p>
+        <div class="code-block">
+          <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+
+contract FarcasterRecruit is Ownable {
+    using Counters for Counters.Counter;
+    
+    Counters.Counter private _jobIds;
+    Counters.Counter private _applicationIds;
+    
+    struct Job {
+        uint256 id;
+        address recruiter;
+        string title;
+        string description;
+        string[] requiredSkills;
+        uint256 compensation;
+        bool isTokenCompensated;
+        bool isRemote;
+        bool isActive;
+        uint256 createdAt;
+    }
+    
+    struct Application {
+        uint256 id;
+        uint256 jobId;
+        address candidate;
+        string farcasterID;
+        string credentialsHash; // IPFS hash to credentials JSON
+        string[] skills;
+        ApplicationStatus status;
+        uint256 appliedAt;
+    }
+    
+    enum ApplicationStatus { Applied, Reviewing, Rejected, Hired }
+    
+    mapping(uint256 => Job) public jobs;
+    mapping(uint256 => Application) public applications;
+    mapping(address => uint256[]) public recruiterJobs;
+    mapping(address => uint256[]) public candidateApplications;
+    
+    event JobCreated(uint256 indexed jobId, address indexed recruiter, string title);
+    event ApplicationSubmitted(uint256 indexed applicationId, uint256 indexed jobId, address indexed candidate);
+    event ApplicationStatusChanged(uint256 indexed applicationId, ApplicationStatus status);
+    
+    // Create a new job posting
+    function createJob(
+        string memory title,
+        string memory description,
+        string[] memory requiredSkills,
+        uint256 compensation,
+        bool isTokenCompensated,
+        bool isRemote
+    ) external returns (uint256) {
+        _jobIds.increment();
+        uint256 jobId = _jobIds.current();
+        
+        jobs[jobId] = Job({
+            id: jobId,
+            recruiter: msg.sender,
+            title: title,
+            description: description,
+            requiredSkills: requiredSkills,
+            compensation: compensation,
+            isTokenCompensated: isTokenCompensated,
+            isRemote: isRemote,
+            isActive: true,
+            createdAt: block.timestamp
+        });
+        
+        recruiterJobs[msg.sender].push(jobId);
+        
+        emit JobCreated(jobId, msg.sender, title);
+        
+        return jobId;
+    }
+    
+    // Submit application for a job
+    function applyForJob(
+        uint256 jobId,
+        string memory farcasterID,
+        string memory credentialsHash,
+        string[] memory skills
+    ) external returns (uint256) {
+        require(jobs[jobId].isActive, "Job is not active");
+        
+        _applicationIds.increment();
+        uint256 applicationId = _applicationIds.current();
+        
+        applications[applicationId] = Application({
+            id: applicationId,
+            jobId: jobId,
+            candidate: msg.sender,
+            farcasterID: farcasterID,
+            credentialsHash: credentialsHash,
+            skills: skills,
+            status: ApplicationStatus.Applied,
+            appliedAt: block.timestamp
+        });
+        
+        candidateApplications[msg.sender].push(applicationId);
+        
+        emit ApplicationSubmitted(applicationId, jobId, msg.sender);
+        
+        return applicationId;
+    }
+    
+    // Update application status (recruiter only)
+    function updateApplicationStatus(uint256 applicationId, ApplicationStatus newStatus) external {
+        uint256 jobId = applications[applicationId].jobId;
+        require(jobs[jobId].recruiter == msg.sender, "Not authorized");
+        
+        applications[applicationId].status = newStatus;
+        
+        emit ApplicationStatusChanged(applicationId, newStatus);
+    }
+    
+    // Get jobs created by a recruiter
+    function getRecruiterJobs(address recruiter) external view returns (uint256[] memory) {
+        return recruiterJobs[recruiter];
+    }
+    
+    // Get applications submitted by a candidate
+    function getCandidateApplications(address candidate) external view returns (uint256[] memory) {
+        return candidateApplications[candidate];
+    }
+}</code></pre>
+        </div>
+      </div>
+
+      <div class="tech-section">
+        <h3>API Integration Example</h3>
+        <p>Our backend service provides RESTful APIs to interact with the Farcaster Recruit platform and on-chain data.</p>
+        <div class="code-block">
+          <pre><code class="language-javascript">// Sample API integration for fetching on-chain credentials
+
+// Fetch candidate's on-chain credentials
+async function fetchOnChainCredentials(walletAddress) {
+  try {
+    const response = await fetch(`/api/credentials/${walletAddress}`);
+    
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+    
+    const credentials = await response.json();
+    return credentials;
+  } catch (error) {
+    console.error("Error fetching credentials:", error);
+    throw error;
+  }
+}
+
+// Verify GitHub contributions on-chain
+async function verifyGitHubContributions(githubHandle, walletAddress) {
+  try {
+    const response = await fetch('/api/verify/github', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        githubHandle,
+        walletAddress
+      }),
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    return result.verified;
+  } catch (error) {
+    console.error("Error verifying GitHub:", error);
+    return false;
+  }
+}
+
+// Submit job application with credentials
+async function submitApplication(jobId, candidateData, signature) {
+  try {
+    const response = await fetch('/api/applications/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        jobId,
+        candidateData,
+        signature
+      }),
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error submitting application:", error);
+    throw error;
+  }
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <div class="modal" id="wallet-modal">
+    <div class="modal-content">
+      <span class="modal-close">&times;</span>
+      <h3 class="modal-title">Connect Wallet</h3>
+      <p>Connect your wallet to verify your identity and access your on-chain credentials.</p>
+      
+      <button class="wallet-connect">
+        <i class="fas fa-wallet"></i> Connect MetaMask
+      </button>
+      
+      <button class="wallet-connect" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+        <i class="fas fa-wallet"></i> Connect Coinbase Wallet
+      </button>
+      
+      <button class="wallet-connect" style="background: linear-gradient(135deg, #8b5cf6, #6366f1);">
+        <i class="fas fa-wallet"></i> Connect WalletConnect
+      </button>
+    </div>
+  </div>
+
+  <div class="modal" id="candidate-modal">
+    <div class="modal-content">
+      <span class="modal-close">&times;</span>
+      <h3 class="modal-title">Candidate Profile</h3>
+      <div id="candidate-details">
+        <!-- Dynamically populated -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- Toast notification -->
+  <div class="toast" id="toast">
+    <div class="toast-icon">
+      <i class="fas fa-check-circle"></i>
+    </div>
+    <div class="toast-text" id="toast-message">
+      Action completed successfully!
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2025 Geotek. All Rights Reserved.</p>
+    <div class="social-links">
+      <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+      <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+      <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+    </div>
+    <p>Contact us: <a href="mailto:info@geotek.com">info@geotek.com</a></p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabButtons = document.querySelectorAll('.tab-button');
+      const tabContents = document.querySelectorAll('.tab-content');
+      const demoTrigger = document.getElementById('demo-trigger');
+      const demoIframe = document.getElementById('demo-iframe');
+      const networkAnimation = document.getElementById('network-animation');
+      const applyButton = document.getElementById('apply-btn');
+      const recruiterAnimation = document.getElementById('recruiter-animation');
+      const createJobBtn = document.getElementById('create-job-btn');
+      const viewJobsBtn = document.getElementById('view-jobs-btn');
+      const candidateForm = document.getElementById('candidate-form');
+      const connectWalletBtn = document.getElementById('connect-wallet');
+      const verifyFarcasterBtn = document.getElementById('verify-farcaster');
+      const verifyGithubBtn = document.getElementById('verify-github');
+      const importCredentialsBtn = document.getElementById('import-credentials');
+      const importProgress = document.getElementById('import-progress');
+      const progressBar = document.getElementById('progress-bar');
+      const walletModal = document.getElementById('wallet-modal');
+      const candidateModal = document.getElementById('candidate-modal');
+      const walletConnectBtns = document.querySelectorAll('.wallet-connect');
+      const modalCloseButtons = document.querySelectorAll('.modal-close');
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toast-message');
+      const viewCandidateBtns = document.querySelectorAll('.view-candidate');
+      const approveCandidateBtns = document.querySelectorAll('.approve-candidate');
+      const rejectCandidateBtns = document.querySelectorAll('.reject-candidate');
+      const jobForm = document.getElementById('create-job-form');
+      const sectionToggles = document.querySelectorAll('.section-toggle');
+      const addSkillBtn = document.getElementById('add-skill');
+      const skillInput = document.getElementById('skill-input');
+      const skillTags = document.getElementById('skill-tags');
+      const recruiterJobForm = document.getElementById('recruiter-job-form');
+
+      function showTab(tabId) {
+        tabContents.forEach(content => content.classList.remove('active'));
+        tabButtons.forEach(button => button.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+      }
+
+      tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const tabId = this.getAttribute('data-tab');
+          showTab(tabId);
+        });
+      });
+
+      function showToast(message, isSuccess = true) {
+        const toastIcon = toast.querySelector('.toast-icon i');
+        toastMessage.textContent = message;
+        
+        if (isSuccess) {
+          toastIcon.className = 'fas fa-check-circle';
+          toastIcon.style.color = 'var(--web3-color)';
+        } else {
+          toastIcon.className = 'fas fa-exclamation-circle';
+          toastIcon.style.color = 'var(--accent-color)';
+        }
+        
+        toast.classList.add('show');
+        
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 3000);
+      }
+
+      function showModal(modal) {
+        modal.classList.add('active');
+      }
+
+      function closeModal(modal) {
+        modal.classList.remove('active');
+      }
+
+      modalCloseButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const modal = this.closest('.modal');
+          closeModal(modal);
+        });
+      });
+
+      // Clicking outside modal to close
+      document.addEventListener('click', function(e) {
+        const modals = document.querySelectorAll('.modal.active');
+        modals.forEach(modal => {
+          if (e.target === modal) {
+            closeModal(modal);
+          }
+        });
+      });
+
+      if (demoTrigger) {
+        demoTrigger.addEventListener('click', function(e) {
+          e.preventDefault();
+          networkAnimation.classList.add('show');
+          setTimeout(() => {
+            networkAnimation.classList.remove('show');
+            // In a real scenario, this would load an actual interactive demo
+            demoIframe.srcdoc = `
+              <html>
+                <head>
+                  <style>
+                    body { font-family: system-ui, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #1a202c; color: white; }
+                    .demo-content { text-align: center; }
+                    h2 { color: #00ffc8; }
+                    p { margin: 20px 0; }
+                    button { background: #00ffc8; color: black; border: none; padding: 10px 20px; border-radius: 4px; font-weight: bold; cursor: pointer; }
+                  </style>
+                </head>
+                <body>
+                  <div class="demo-content">
+                    <h2>Interactive Farcaster Recruit Demo</h2>
+                    <p>This is a simulated Farcaster Frame that would normally appear in your Farcaster feed.</p>
+                    <p>From here, you can browse jobs, apply with your connected wallet, and showcase your on-chain credentials.</p>
+                    <button>Explore Available Positions</button>
+                  </div>
+                </body>
+              </html>
+            `;
+          }, 3000);
+        });
+      }
+
+      if (applyButton) {
+        applyButton.addEventListener('click', function(e) {
+          e.preventDefault();
+          recruiterAnimation.classList.add('show');
+          setTimeout(() => {
+            recruiterAnimation.classList.remove('show');
+            showToast('Application submitted successfully!');
+          }, 2500);
+        });
+      }
+
+      if (createJobBtn) {
+        createJobBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          document.querySelector('.job-card').style.display = 'none';
+          jobForm.classList.add('active');
+        });
+      }
+
+      if (viewJobsBtn) {
+        viewJobsBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          showToast('Retrieving available jobs from the blockchain...');
+          setTimeout(() => {
+            showToast('5 available jobs loaded from Farcaster network');
+          }, 2000);
+        });
+      }
+
+      if (candidateForm) {
+        candidateForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          const walletInput = document.getElementById('wallet');
+          
+          if (!walletInput.value) {
+            showToast('Please connect your wallet first', false);
+            return;
+          }
+          
+          networkAnimation.classList.add('show');
+          setTimeout(() => {
+            networkAnimation.classList.remove('show');
+            showToast('Application submitted successfully!');
+            this.reset();
+            document.getElementById('wallet').value = '';
+          }, 2500);
+        });
+      }
+
+      if (connectWalletBtn) {
+        connectWalletBtn.addEventListener('click', function() {
+          showModal(walletModal);
+        });
+      }
+
+      if (walletConnectBtns) {
+        walletConnectBtns.forEach(btn => {
+          btn.addEventListener('click', function() {
+            closeModal(walletModal);
+            
+            networkAnimation.classList.add('show');
+            setTimeout(() => {
+              networkAnimation.classList.remove('show');
+              document.getElementById('wallet').value = '0x71C7656EC7ab88b098defB751B7401B5f6d8976F';
+              showToast('Wallet connected successfully!');
+              
+              // Automatically fetch Farcaster ID after wallet connection
+              document.getElementById('farcaster_id').value = '42069';
+            }, 2000);
+          });
+        });
+      }
+
+      if (verifyFarcasterBtn) {
+        verifyFarcasterBtn.addEventListener('click', function() {
+          if (!document.getElementById('farcaster_id').value) {
+            showToast('Please connect your wallet first to verify Farcaster ID', false);
+            return;
+          }
+          
+          networkAnimation.classList.add('show');
+          setTimeout(() => {
+            networkAnimation.classList.remove('show');
+            showToast('Farcaster ID verified successfully!');
+          }, 1500);
+        });
+      }
+
+      if (verifyGithubBtn) {
+        verifyGithubBtn.addEventListener('click', function() {
+          const githubInput = document.getElementById('github');
+          
+          if (!githubInput.value) {
+            showToast('Please enter your GitHub profile URL', false);
+            return;
+          }
+          
+          networkAnimation.classList.add('show');
+          setTimeout(() => {
+            networkAnimation.classList.remove('show');
+            showToast('GitHub profile verified successfully!');
+          }, 2000);
+        });
+      }
+
+      if (importCredentialsBtn) {
+        importCredentialsBtn.addEventListener('click', function() {
+          const walletInput = document.getElementById('wallet');
+          
+          if (!walletInput.value) {
+            showToast('Please connect your wallet first', false);
+            return;
+          }
+          
+          importProgress.style.display = 'block';
+          let progress = 0;
+          
+          const interval = setInterval(() => {
+            progress += 10;
+            progressBar.style.width = `${progress}%`;
+            
+            if (progress >= 100) {
+              clearInterval(interval);
+              setTimeout(() => {
+                importProgress.style.display = 'none';
+                showToast('On-chain credentials imported successfully!');
+                
+                // Populate skills from "imported" credentials
+                document.getElementById('skills').value = 'React, Solidity, Farcaster Frames, Web3, Smart Contracts';
+              }, 500);
+            }
+          }, 300);
+        });
+      }
+
+      if (viewCandidateBtns) {
+        viewCandidateBtns.forEach(btn => {
+          btn.addEventListener('click', function() {
+            const candidateId = this.getAttribute('data-id');
+            const candidateDetails = document.getElementById('candidate-details');
+            
+            // Simulate loading candidate details
+            candidateDetails.innerHTML = `<p>Loading candidate details...</p>`;
+            showModal(candidateModal);
+            
+            setTimeout(() => {
+              // In a real app, this would be populated with data from the blockchain
+              let candidateName, candidateDetails;
+              
+              switch(candidateId) {
+                case '1':
+                  candidateName = 'Alice Wonderland';
+                  candidateAddress = '0x123...abc';
+                  break;
+                case '2':
+                  candidateName = 'Bob The Builder';
+                  candidateAddress = '0x456...def';
+                  break;
+                case '3':
+                  candidateName = 'Charlie Chaplin';
+                  candidateAddress = '0x789...ghi';
+                  break;
+                case '4':
+                  candidateName = 'Diana Prince';
+                  candidateAddress = '0xabc...123';
+                  break;
+                case '5':
+                  candidateName = 'Eve Harrington';
+                  candidateAddress = '0xdef...456';
+                  break;
+                default:
+                  candidateName = 'Unknown Candidate';
+                  candidateAddress = '0x000...000';
+              }
+              
+              candidateDetails.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                  <div style="width: 60px; height: 60px; background: #e2e8f0; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-user" style="font-size: 30px; color: #94a3b8;"></i>
+                  </div>
+                  <div>
+                    <h4 style="margin: 0; font-size: 18px;">${candidateName}</h4>
+                    <p style="margin: 5px 0 0 0; font-size: 14px; color: #64748b; font-family: monospace;">${candidateAddress}</p>
+                  </div>
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                  <h4 style="margin: 0 0 10px 0; color: #4299e1;">Blockchain Credentials</h4>
+                  <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    <span class="badge web3"><i class="fas fa-check-circle"></i> Wallet Verified</span>
+                    <span class="badge web3"><i class="fas fa-id-card"></i> Farcaster ID: 42069</span>
+                    <span class="badge web3"><i class="fas fa-code-branch"></i> GitHub Verified</span>
+                    <span class="badge web3"><i class="fas fa-certificate"></i> 3 POAPs</span>
+                  </div>
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                  <h4 style="margin: 0 0 10px 0; color: #4299e1;">Skills</h4>
+                  <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    <span class="badge">React</span>
+                    <span class="badge">Solidity</span>
+                    <span class="badge">TypeScript</span>
+                    <span class="badge">GraphQL</span>
+                    <span class="badge">Smart Contracts</span>
+                  </div>
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                  <h4 style="margin: 0 0 10px 0; color: #4299e1;">Experience</h4>
+                  <p style="margin: 0; line-height: 1.6;">
+                    3+ years of experience in web3 development with a focus on smart contracts and dApp frontends.
+                    Previously worked at Consensys and contributed to multiple DeFi protocols. Active in the Ethereum
+                    community since 2019.
+                  </p>
+                </div>
+                
+                <div style="margin-top: 25px; display: flex; gap: 10px;">
+                  <button class="cta-btn" style="flex: 1;">Schedule Interview</button>
+                  <button style="background: #e53e3e; flex: 1;" class="cta-btn">Reject</button>
+                </div>
+              `;
+            }, 1500);
+          });
+        });
+      }
+
+      if (approveCandidateBtns) {
+        approveCandidateBtns.forEach(btn => {
+          btn.addEventListener('click', function() {
+            const candidateId = this.getAttribute('data-id');
+            networkAnimation.classList.add('show');
+            
+            setTimeout(() => {
+              networkAnimation.classList.remove('show');
+              const statusCell = this.closest('tr').querySelector('.status');
+              statusCell.className = 'status reviewing';
+              statusCell.textContent = 'Reviewing';
+              showToast('Candidate status updated successfully!');
+            }, 1500);
+          });
+        });
+      }
+
+      if (rejectCandidateBtns) {
+        rejectCandidateBtns.forEach(btn => {
+          btn.addEventListener('click', function() {
+            if (confirm('Are you sure you want to reject this candidate?')) {
+              const candidateId = this.getAttribute('data-id');
+              networkAnimation.classList.add('show');
+              
+              setTimeout(() => {
+                networkAnimation.classList.remove('show');
+                this.closest('tr').remove();
+                showToast('Candidate rejected successfully.');
+              }, 1500);
+            }
+          });
+        });
+      }
+
+      if (sectionToggles) {
+        sectionToggles.forEach(toggle => {
+          toggle.addEventListener('click', function() {
+            const section = this.nextElementSibling;
+            const icon = this.querySelector('i');
+            
+            if (section.classList.contains('active')) {
+              section.classList.remove('active');
+              icon.className = 'fas fa-chevron-down';
+            } else {
+              section.classList.add('active');
+              icon.className = 'fas fa-chevron-up';
+            }
+          });
+        });
+      }
+
+      if (addSkillBtn && skillInput && skillTags) {
+        addSkillBtn.addEventListener('click', function() {
+          const skill = skillInput.value.trim();
+          
+          if (!skill) return;
+          
+          const skillTag = document.createElement('div');
+          skillTag.className = 'skill-tag';
+          skillTag.innerHTML = `
+            ${skill}
+            <i class="fas fa-times"></i>
+          `;
+          
+          const removeBtn = skillTag.querySelector('i');
+          removeBtn.addEventListener('click', function() {
+            skillTag.remove();
+          });
+          
+          skillTags.appendChild(skillTag);
+          skillInput.value = '';
+        });
+        
+        skillInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            addSkillBtn.click();
+          }
+        });
+      }
+
+      if (recruiterJobForm) {
+        recruiterJobForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          recruiterAnimation.classList.add('show');
+          setTimeout(() => {
+            recruiterAnimation.classList.remove('show');
+            jobForm.classList.remove('active');
+            document.querySelector('.job-card').style.display = 'block';
+            showToast('Job posting published to Farcaster!');
+            this.reset();
+            skillTags.innerHTML = '';
+          }, 2500);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
