@@ -1,0 +1,1436 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Comprehensive Amperity Interview Cheat Sheet &amp; Narrative Guide</title>
+    <style>
+        /* Enhanced Global Styles */
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #003366;
+            --accent-color: #00a0e9;
+            --light-bg: #f8f9fa;
+            --dark-bg: #e9ecef;
+            --text-color: #333;
+            --light-text: #555;
+            --border-radius: 10px;
+            --box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(145deg, #eef2f7, #ffffff);
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.7em;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            text-align: center;
+            color: var(--secondary-color);
+        }
+
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+
+        h2 {
+            font-size: 1.6em;
+        }
+
+        h3 {
+            font-size: 1.3em;
+            color: var(--secondary-color);
+        }
+
+        h4 {
+            font-size: 1.1em;
+            color: var(--accent-color);
+        }
+
+        p {
+            margin: 0 0 15px;
+        }
+
+        /* Enhanced Section Styles */
+        section {
+            background: #fff;
+            margin-bottom: 25px;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            border-left: 5px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.03) 0%, rgba(255,255,255,0) 60%);
+            z-index: 0;
+        }
+
+        section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Color-coded sections */
+        section:nth-child(3n+1) {
+            border-left-color: var(--primary-color);
+        }
+
+        section:nth-child(3n+2) {
+            border-left-color: var(--accent-color);
+        }
+
+        section:nth-child(3n+3) {
+            border-left-color: #5cb85c;
+        }
+
+        /* Highlight focus section */
+        #prep-with-mona {
+            background: linear-gradient(to right, #f0f7ff, #ffffff);
+            border: 1px solid var(--accent-color);
+            border-left: 5px solid var(--accent-color);
+            position: relative;
+        }
+
+        #prep-with-mona::before {
+            content: "Focus Area";
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: var(--accent-color);
+            color: white;
+            padding: 3px 12px;
+            font-size: 0.8em;
+            border-radius: 30px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 1;
+        }
+
+        /* Competitive landscape section */
+        #competitors {
+            background: linear-gradient(to right, #f0f7ff, #ffffff);
+            border-left: 5px solid #4a90e2;
+        }
+
+        .competitor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .competitor-card {
+            border: 1px solid #e1e4e8;
+            border-radius: 8px;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .competitor-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background-color: #4a90e2;
+            opacity: 0.7;
+            z-index: -1;
+        }
+
+        .competitor-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transform: translateY(-5px);
+        }
+
+        .competitor-card h4 {
+            margin-top: 0;
+            border-bottom: 2px solid #eef2f7;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.9em;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 14px 18px;
+            text-align: left;
+        }
+
+        .comparison-table th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: rgba(0,0,0,0.02);
+        }
+
+        .comparison-table tr:not(:last-child) {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .comparison-table tr:hover {
+            background-color: #f7fbff;
+        }
+
+        .strength {
+            color: #28a745;
+            font-weight: 600;
+            position: relative;
+            padding-left: 18px;
+            display: inline-block;
+        }
+
+        .strength::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .challenge {
+            color: #dc3545;
+            font-weight: 600;
+            position: relative;
+            padding-left: 18px;
+            display: inline-block;
+        }
+
+        .challenge::before {
+            content: "!";
+            position: absolute;
+            left: 5px;
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        /* Enhanced Section Headings */
+        .section-heading {
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            padding-left: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-heading::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 15px;
+            width: 5px;
+            background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
+            border-radius: 3px;
+        }
+
+        .section-heading::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 180px;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary-color), rgba(0,0,0,0.05));
+        }
+
+        /* Enhanced Lists */
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin: 12px 0;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        ul li {
+            list-style-type: none;
+            padding-left: 5px;
+        }
+
+        ul li::before {
+            content: "";
+            position: absolute;
+            left: -20px;
+            top: 12px;
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+        }
+
+        ul ul li::before {
+            width: 6px;
+            height: 6px;
+            border: 1px solid var(--accent-color);
+            background-color: transparent;
+        }
+
+        /* Enhanced Blockquotes */
+        blockquote {
+            background-color: var(--light-bg);
+            border-left: 5px solid var(--accent-color);
+            margin: 25px 0;
+            padding: 25px;
+            font-style: italic;
+            line-height: 1.6;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+
+        blockquote::before {
+            content: """;
+            font-size: 4em;
+            position: absolute;
+            left: 10px;
+            top: -20px;
+            color: rgba(0, 86, 179, 0.1);
+            font-family: Georgia, serif;
+        }
+
+        /* Enhanced Footer */
+        footer {
+            text-align: center;
+            font-style: italic;
+            padding: 30px;
+            margin-top: 40px;
+            color: var(--light-text);
+            border-top: 1px solid #ddd;
+            background-color: var(--light-bg);
+            border-radius: var(--border-radius);
+            position: relative;
+        }
+
+        footer::before, footer::after {
+            content: "";
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(0,0,0,0.1), transparent);
+            left: 5%;
+            right: 5%;
+        }
+
+        footer::before {
+            top: -3px;
+        }
+
+        footer::after {
+            bottom: -3px;
+        }
+
+        /* Highlight text */
+        .highlight {
+            background: linear-gradient(120deg, rgba(0, 160, 233, 0.1) 0%, rgba(0, 160, 233, 0.15) 100%);
+            padding: 3px 7px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: var(--secondary-color);
+            display: inline-block;
+        }
+
+        /* STAR Framework styling */
+        .star-framework {
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 22px;
+            margin: 25px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.04);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .star-framework::after {
+            content: "STAR";
+            position: absolute;
+            right: -15px;
+            bottom: -10px;
+            font-size: 5em;
+            color: rgba(0,0,0,0.03);
+            font-weight: bold;
+            letter-spacing: 2px;
+            pointer-events: none;
+        }
+
+        .star-framework h4 {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ddd;
+        }
+
+        .star-step {
+            font-weight: bold;
+            color: var(--primary-color);
+            display: inline-block;
+            margin-right: 5px;
+            position: relative;
+        }
+
+        .star-step::after {
+            content: ":";
+            color: inherit;
+        }
+
+        /* Table of contents - FIXED */
+        .toc {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 0 0 30px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--primary-color);
+            margin-left: 30px;
+            /* Changed positioning */
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 280px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            z-index: 100;
+            opacity: 0.95;
+            transform: translateZ(0);
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .toc:hover {
+            opacity: 1;
+        }
+
+        /* Add padding to main content to prevent overlap */
+        .container {
+            padding-right: 300px;
+        }
+
+        /* Toggle button for mobile */
+        .toc-toggle {
+            display: none;
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+            z-index: 101;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .toc h2 {
+            margin-top: 0;
+            font-size: 1.3em;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 15px;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding-left: 10px;
+            margin: 0;
+        }
+
+        .toc li {
+            margin: 8px 0;
+            font-size: 0.95em;
+        }
+
+        .toc li::before {
+            display: none;
+        }
+
+        .toc a {
+            color: var(--primary-color);
+            text-decoration: none;
+            display: block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .toc a:hover {
+            background-color: rgba(0,86,179,0.05);
+            transform: translateX(3px);
+        }
+
+        .toc-number {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            color: white;
+            text-align: center;
+            line-height: 25px;
+            font-size: 0.85em;
+            margin-right: 10px;
+        }
+
+        /* Mona insights styling */
+        .mona-quote {
+            background-color: #f2f9ff;
+            border-left: 4px solid #4a90e2;
+            padding: 15px;
+            font-style: italic;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+            position: relative;
+        }
+
+        .mona-quote::before {
+            content: """;
+            font-family: Georgia, serif;
+            font-size: 2.5em;
+            position: absolute;
+            left: 5px;
+            top: -10px;
+            color: rgba(74, 144, 226, 0.2);
+        }
+
+        .insight-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+        }
+
+        .insight-card h4 {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: #0056b3;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+        
+        /* Case study styling */
+        .case-study {
+            background-color: #f9fcff;
+            border: 1px solid #d1e6ff;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        
+        .case-study h3 {
+            color: #0056b3;
+            font-size: 1.4em;
+            margin-top: 0;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #d1e6ff;
+            padding-bottom: 10px;
+        }
+        
+        .case-study-tag {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: linear-gradient(135deg, #0056b3, #00a0e9);
+            color: white;
+            padding: 5px 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .metric-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid #4a90e2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #0056b3;
+            margin: 10px 0;
+        }
+        
+        .metric-label {
+            color: #555;
+            font-size: 0.9em;
+        }
+
+        /* Responsive styles for TOC */
+        @media (max-width: 1200px) {
+            .container {
+                padding-right: 20px;
+            }
+            
+            .toc {
+                position: fixed;
+                right: -300px;
+                transition: right 0.3s ease;
+            }
+            
+            .toc.active {
+                right: 0;
+            }
+            
+            .toc-toggle {
+                display: block;
+            }
+            
+            body.toc-open {
+                overflow: hidden;
+            }
+            
+            .overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.5);
+                z-index: 99;
+            }
+            
+            body.toc-open .overlay {
+                display: block;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                font-size: 12pt;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 0 !important;
+            }
+
+            section {
+                page-break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ddd;
+                margin-bottom: 20px;
+            }
+
+            .toc, .toc-toggle, .overlay {
+                display: none;
+            }
+        }
+
+        /* Enhanced responsiveness */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            section {
+                padding: 20px 15px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .section-heading::before {
+                height: 20px;
+            }
+
+            .competitor-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.8em;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 8px 10px;
+            }
+
+            blockquote {
+                padding: 15px;
+            }
+
+            blockquote::before {
+                font-size: 3em;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* New tag styles */
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+
+        .tag.leadership {
+            background-color: #4a90e2;
+        }
+
+        .tag.strategy {
+            background-color: #8e44ad;
+        }
+
+        .tag.customer {
+            background-color: #27ae60;
+        }
+
+        .tag.technical {
+            background-color: #e67e22;
+        }
+    </style>
+</head>
+<body>
+<div class="overlay"></div>
+<button class="toc-toggle">≡</button>
+<div class="container">
+    <h1>Comprehensive Amperity Interview Cheat Sheet &amp; Narrative Guide</h1>
+
+    <div class="toc">
+        <h2>Quick Navigation</h2>
+        <ul>
+            <li><a href="#company-context"><span class="toc-number">1</span>Company Context &amp; Leadership</a></li>
+            <li><a href="#role-clarity"><span class="toc-number">2</span>Role Clarity - CSM</a></li>
+            <li><a href="#interview-themes"><span class="toc-number">3</span>Interview Themes &amp; Positioning</a></li>
+            <li><a href="#amperity-product"><span class="toc-number">4</span>Amperity Product Overview</a></li>
+            <li><a href="#competitors"><span class="toc-number">5</span>Competitive Landscape</a></li>
+            <li><a href="#questions-to-ask"><span class="toc-number">6</span>Questions to Ask</a></li>
+            <li><a href="#key-messages"><span class="toc-number">7</span>Key Messages</a></li>
+            <li><a href="#quick-notes"><span class="toc-number">8</span>Quick Notes</a></li>
+            <li><a href="#case-studies"><span class="toc-number">9</span>McDonald's Case Study</a></li>
+            <li><a href="#contextual-examples"><span class="toc-number">10</span>Contextual Examples</a></li>
+            <li><a href="#prep-with-mona"><span class="toc-number">11</span>Preparation for Mona Interview</a></li>
+        </ul>
+    </div>
+
+    <section id="company-context">
+        <h2 class="section-heading">1. Company Context &amp; Leadership Dynamics</h2>
+        <ul>
+            <li>
+                <strong>New CEO (Tony from Salesforce):</strong>
+                <ul>
+                    <li>Introduced <strong>V2MOM</strong>: Vision, Values, Methods, Obstacles, Measures (Salesforce's strategic framework).</li>
+                    <li>Ambitious plans, possibly setting up Amperity for acquisition--creating both excitement and uncertainty.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Customer Success Leadership (Mona Akmal):</strong>
+                <ul>
+                    <li>Currently Chief Customer Officer (previously founded Falkon, a go-to-market intelligence platform).</li>
+                    <li>Known for a direct, no-nonsense communication style that values authenticity and problem-solving over traditional sales approaches.</li>
+                    <li>Advocates for data-driven decision making and strategic thinking that connects technical capabilities to business outcomes.</li>
+                    <li>Prioritizes a customer-centric approach focused on solving real problems rather than following standard playbooks.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Peers and Internal Dynamics:</strong>
+                <ul>
+                    <li>Potential peers are likely junior with limited management experience, so expect to provide leadership and structure immediately.</li>
+                    <li><strong>Kenny's Perspective:</strong> Optimistic about long-term prospects but acknowledges the chaotic environment.</li>
+                </ul>
+            </li>
+        </ul>
+        <h3>Your Angle</h3>
+        <ul>
+            <li>Highlight extensive experience handling ambiguity and change (e.g., Mastercard, Cheetah Digital).</li>
+            <li>Position yourself as the leader who can structure chaos into measurable success.</li>
+            <li>Emphasize adaptability--demonstrate your quick alignment with new strategies like Salesforce's V2MOM.</li>
+            <li>Showcase your ability to translate technical capabilities into business value -- a trait Mona clearly values.</li>
+        </ul>
+    </section>
+
+    <section id="role-clarity">
+        <h2 class="section-heading">2. Role Clarity -- Customer Success Management (CSM)</h2>
+        <h3>Role Evolution</h3>
+        <ul>
+            <li>Transitioned from an "account manager" role back to traditional CSM.</li>
+            <li>Past mismanagement: Account Managers were juggling sales, technical work, and customer advocacy--diluting overall value.</li>
+            <li>Current role: Defined as strategic advisory with involvement in renewals through ensuring client satisfaction and value delivery.</li>
+        </ul>
+
+        <div class="mona-quote">
+            "I hate selling. I hate commissions... I love solving problems for people. I love business acumen. I love creative thinking. I love domain expertise. Unfortunately most sales is 'playbook' driven and people have gotten away with it during the boom era of SaaS. I don't think that'll cut it anymore."
+        </div>
+
+        <h3>Challenges in Current CSM Structure</h3>
+        <ul>
+            <li>Long implementation cycles (6--18 months).</li>
+            <li>Customer skepticism during prolonged onboarding, risking churn at renewal.</li>
+            <li>Difficulty managing expectations and demands--traditionally reactive rather than consultative.</li>
+            <li>Need for clear value milestones throughout implementation to maintain engagement.</li>
+        </ul>
+        <h3>Your Angle</h3>
+        <ul>
+            <li>Emphasize your ability to structure complex client implementations into clear milestones to maintain client engagement.</li>
+            <li>Use examples from Mastercard and Cheetah Digital that showcase your consultative and strategic approach.</li>
+            <li>Highlight your methodology for turning technical capabilities into business value narratives that resonate with executives.</li>
+        </ul>
+        <h3>Suggested Talking Points</h3>
+        <ul>
+            <li>Spearheaded McDonald's global loyalty strategy at Mastercard, managing cross-functional complexity.</li>
+            <li>Led strategic customer advocacy at Cheetah Digital, handling multimillion-dollar accounts while navigating internal/external politics.</li>
+            <li>Developed frameworks for measuring implementation success before the final go-live to maintain executive confidence.</li>
+        </ul>
+    </section>
+
+    <section id="interview-themes">
+        <h2 class="section-heading">3. Key Interview Themes &amp; How You Should Position Yourself</h2>
+        <ul>
+            <li>
+                <strong>Providing Structure in Ambiguity:</strong>
+                <ul>
+                    <li>Discuss your track record in diagnosing issues and creating scalable processes in fast-paced, ambiguous settings.</li>
+                    <li>Example: Managing global stakeholder relationships during periods of significant change at Mastercard.</li>
+                    <li>Align with Mona's preference for structured documentation over excessive meetings, as she's mentioned in her content.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Hands-On &amp; Strategic Leadership:</strong>
+                <ul>
+                    <li>Illustrate how you balance hands-on problem-solving with strategic planning.</li>
+                    <li>Example: At Cheetah Digital, you navigated complex client engagements while establishing frameworks for junior team members.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Pushing Back Strategically:</strong>
+                <ul>
+                    <li>Showcase your ability to guide high-profile clients (e.g., McDonald's or Amex) toward best practices when demands misalign with strategy.</li>
+                    <li>Example: Preventing scope creep through effective expectation management.</li>
+                    <li>Connect this to Mona's philosophy of being customer-centric but not simply accommodating every request.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Long Implementation Cycles:</strong>
+                <ul>
+                    <li>Detail how you segmented large projects into incremental wins to avoid customer churn.</li>
+                    <li>Example: Creating short-term successes during long-term projects at both Mastercard and Cheetah Digital.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Mentorship &amp; Team Development:</strong>
+                <ul>
+                    <li>Describe your success in transforming junior teams into strategic professionals through training and empowerment.</li>
+                    <li>Example: Mentoring a global team of 12 at Cheetah Digital to deliver consistent, high-quality outcomes.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Alignment with New CEO's Vision:</strong>
+                <ul>
+                    <li>Convey enthusiasm and flexibility in adapting to Tony's strategic initiatives (like V2MOM).</li>
+                    <li>Example: Your adaptability during strategic pivots at Mastercard.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Direct Communication Style:</strong>
+                <ul>
+                    <li>Demonstrate your ability to communicate clearly and directly, similar to Mona's straightforward approach.</li>
+                    <li>Example: How you've delivered difficult messages to clients when necessary while preserving the relationship.</li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+
+    <section id="amperity-product">
+        <h2 class="section-heading">4. Amperity Product Overview</h2>
+        <h3>Nearly a Decade of Customer Data Innovation</h3>
+        <p>
+            In 2016, Amperity set out to tackle the significant challenges brands faced with customer data.
+            The founders saw a gap between the massive amounts of data brands were collecting and the ability
+            to create real value from it. Conversations with leaders in technology, marketing, and operations
+            revealed the main obstacle: trying to unify, refine, and democratize customer data using custom-code
+            and rules-based methods.
+        </p>
+        <p>
+            The breakthrough came from embracing the reality that customer data is inherently messy. It always will be:
+            people change their names and contact information; their behaviors and preferences evolve. By drawing on
+            leading academic research and developing a machine learning-based approach designed for the uncertainty
+            of customer data, the team found a way to ensure the continuous stability of an individual profile over time,
+            providing the foundation of data quality to power any consumer business.
+        </p>
+        <ul>
+            <li><strong>2016:</strong> Amperity founded; first customer: Alaska Airlines</li>
+            <li><strong>Early Growth:</strong> 12 customers; 1st patent issued</li>
+            <li><strong>Funding Milestones:</strong> Series B, Series C</li>
+            <li><strong>Acquisition:</strong> Amperity acquires Custora</li>
+            <li><strong>Leadership &amp; Board:</strong> Starbucks CEO joins Board</li>
+            <li><strong>Diversity &amp; Inclusion:</strong> 7th Employee Resource Group established (EMEA &amp; APAC expansion)</li>
+            <li><strong>2022:</strong> 100+ customers, 200+ integrations</li>
+            <li><strong>Patents:</strong> 9th patent; over 10 billion profiles processed daily</li>
+            <li><strong>2024:</strong> "Ampli" launches</li>
+        </ul>
+        <h3>Key Differentiators</h3>
+        <ul>
+            <li>Real-time data integration and advanced analytics drive actionable insights.</li>
+            <li>Seamlessly integrates with existing CRM and marketing tools to optimize customer engagement.</li>
+            <li>Scalable architecture designed to support rapid growth and evolving customer needs.</li>
+        </ul>
+        <h3>Strategic Relevance for Your Role</h3>
+        <ul>
+            <li>Understanding these capabilities allows you to articulate how you can drive customer success with data-driven strategies.</li>
+            <li>Align your experience in managing complex implementations with Amperity's goal of delivering measurable outcomes.</li>
+            <li>Discuss leveraging real-time analytics to accelerate customer onboarding and reduce churn.</li>
+        </ul>
+        <h3>Competitive Edge</h3>
+        <ul>
+            <li>Amperity stands out by enabling brands to harness data effectively for personalization and customer retention.</li>
+            <li>Use this insight to demonstrate your strategic and technical aptitude during the interview.</li>
+        </ul>
+    </section>
+
+    <section id="competitors">
+        <h2 class="section-heading">5. Competitive Landscape: Amperity in the CDP Market</h2>
+
+        <p>Understanding Amperity's position in the competitive landscape demonstrates your strategic thinking and market awareness--crucial qualities for a senior CSM role. This knowledge will help you frame discussions about Amperity's value proposition and competitive advantages during your interview.</p>
+
+        <h3>Major Competitors Overview</h3>
+
+        <div class="competitor-grid">
+            <div class="competitor-card">
+                <h4>Segment (Twilio)</h4>
+                <ul>
+                    <li>Acquired by Twilio for $3.2B in 2020</li>
+                    <li>Strength: Developer-friendly API approach to customer data integration</li>
+                    <li>Market position: Popular among tech-forward companies</li>
+                    <li>Weakness: Less focused on AI-driven identity resolution</li>
+                </ul>
+            </div>
+
+            <div class="competitor-card">
+                <h4>Tealium</h4>
+                <ul>
+                    <li>Founded in 2008, established player in tag management and CDP</li>
+                    <li>Strength: Strong enterprise customer base, particularly in financial services</li>
+                    <li>Market position: Trusted legacy vendor</li>
+                    <li>Weakness: Technology perceived as less innovative than newer platforms</li>
+                </ul>
+            </div>
+
+            <div class="competitor-card">
+                <h4>mParticle</h4>
+                <ul>
+                    <li>Founded in 2013, raised over $150M in funding</li>
+                    <li>Strength: Mobile-first approach with strong data governance features</li>
+                    <li>Market position: Popular with mobile-centric brands and digital natives</li>
+                    <li>Weakness: Less comprehensive in omnichannel environments</li>
+                </ul>
+            </div>
+
+            <div class="competitor-card">
+                <h4>Salesforce CDP</h4>
+                <ul>
+                    <li>Late entrant leveraging Salesforce's ecosystem advantage</li>
+                    <li>Strength: Native integration with Salesforce Marketing Cloud</li>
+                    <li>Market position: Attractive to existing Salesforce customers</li>
+                    <li>Weakness: Less robust identity resolution capabilities compared to pure-play CDPs</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3>Competitive Positioning Matrix</h3>
+
+        <table class="comparison-table">
+            <thead>
+            <tr>
+                <th>Capability</th>
+                <th>Amperity</th>
+                <th>Segment</th>
+                <th>Tealium</th>
+                <th>mParticle</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Identity Resolution</td>
+                <td><span class="strength">Market Leading</span></td>
+                <td>Moderate</td>
+                <td>Strong</td>
+                <td>Moderate</td>
+            </tr>
+            <tr>
+                <td>Machine Learning</td>
+                <td><span class="strength">Core Strength</span></td>
+                <td>Limited</td>
+                <td>Moderate</td>
+                <td>Emerging</td>
+            </tr>
+            <tr>
+                <td>Implementation Time</td>
+                <td><span class="challenge">6-18 months</span></td>
+                <td>2-6 months</td>
+                <td>4-12 months</td>
+                <td>3-6 months</td>
+            </tr>
+            <tr>
+                <td>Enterprise Scalability</td>
+                <td><span class="strength">Excellent</span></td>
+                <td>Good</td>
+                <td>Excellent</td>
+                <td>Good</td>
+            </tr>
+            <tr>
+                <td>Retail Industry Focus</td>
+                <td><span class="strength">Specialized</span></td>
+                <td>Broad</td>
+                <td>Broad</td>
+                <td>Broad</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h3>Amperity's Competitive Advantages</h3>
+        <ul>
+            <li><span class="highlight">Superior Identity Resolution:</span> Amperity's patented machine learning approach to identity resolution creates a significant advantage in accurately identifying and unifying customer profiles--especially critical for enterprises with complex, fragmented data sources.</li>
+            <li><span class="highlight">Retail &amp; CPG Specialization:</span> While competitors take a broader approach, Amperity has deep expertise in retail and consumer brands, with specialized capabilities for these verticals.</li>
+            <li><span class="highlight">Customer Intelligence Suite:</span> The acquisition of Custora enhanced Amperity's predictive analytics capabilities, allowing for more sophisticated customer segmentation and lifetime value prediction.</li>
+            <li><span class="highlight">Enterprise-Grade Architecture:</span> Built to handle massive data volumes (10+ billion profiles daily), making it suitable for large enterprise deployments.</li>
+        </ul>
+
+        <h3>Competitive Challenges to Address</h3>
+        <ul>
+            <li><span class="highlight">Implementation Complexity:</span> Longer implementation cycles (6-18 months) compared to some competitors creates customer impatience and ROI concerns.</li>
+            <li><span class="highlight">Technical Resource Requirements:</span> Requires more technical expertise to fully leverage, creating potential adoption barriers.</li>
+            <li><span class="highlight">Market Education:</span> The advanced ML capabilities require significant customer education to understand full value--creating opportunities for consultative CSMs who can articulate this value.</li>
+        </ul>
+
+        <h3>How This Shapes Your CSM Approach</h3>
+        <ul>
+            <li>Position Amperity's longer implementation timeline as necessary for superior data quality, while creating early value milestones to maintain momentum.</li>
+            <li>Develop expertise in articulating the concrete business benefits of Amperity's advanced identity resolution compared to competitors' approaches.</li>
+            <li>Prepare to address competitive displacement attempts, particularly from Salesforce CDP in accounts where they have a strong foothold.</li>
+            <li>Leverage understanding of competitive strengths/weaknesses to guide clients toward Amperity's optimal use cases rather than attempting to match competitor capabilities in areas where Amperity isn't positioned to win.</li>
+        </ul>
+
+        <h3>Strategic Talking Points for Your Interview</h3>
+        <ul>
+            <li>"I understand Amperity's unique position in the market--balancing superior technical capabilities with the need to demonstrate value throughout longer implementation cycles."</li>
+            <li>"My experience managing complex customer relationships at Mastercard has prepared me to articulate sophisticated technical advantages in business terms clients can understand and value."</li>
+            <li>"I see an opportunity to leverage Amperity's retail specialization as a strategic advantage against broader competitors like Segment and Salesforce."</li>
+        </ul>
+    </section>
+
+    <section id="questions-to-ask">
+        <h2 class="section-heading">6. Questions You Should Ask</h2>
+        <ul>
+            <li>
+                <strong>Change Management:</strong>
+                <ul>
+                    <li>What immediate outcomes are expected from the new CSM leadership approach?</li>
+                    <li>How do you plan to measure the success of the changes being implemented?</li>
+                    <li>You've transitioned from a product background to leading customer success. What insights from your product experience have been most valuable in reshaping the CSM function?</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Team Dynamics:</strong>
+                <ul>
+                    <li>Given the junior level of the current CSM team, what support or frameworks are in place for their professional development?</li>
+                    <li>How is success measured in the new CSM structure, and how do these metrics align with broader organizational goals?</li>
+                    <li>What capabilities do you believe are most critical to develop in the current CSM team?</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Strategic Alignment:</strong>
+                <ul>
+                    <li>How quickly do you expect the new V2MOM approach to be fully adopted, and what will be the impact on team performance?</li>
+                    <li>How are you balancing the tension between maintaining client relationships and introducing more strategic, prescriptive client management practices?</li>
+                    <li>What does success look like for the CSM team in 6 months? In 12 months?</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Competitive Positioning:</strong>
+                <ul>
+                    <li>How does Amperity position its longer implementation timeline against competitors who promise faster time-to-value?</li>
+                    <li>Which competitive differentiators have resonated most strongly with customers who choose Amperity over alternatives?</li>
+                    <li>Which competitive differentiators are you finding most effective in the current market landscape, particularly against Salesforce CDP and Segment?</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Business Impact Questions:</strong>
+                <ul>
+                    <li>How are you measuring the impact of customer success on revenue retention and growth?</li>
+                    <li>What's your perspective on balancing automation with human touchpoints in the customer journey, particularly during implementation?</li>
+                    <li>How are you measuring the impact of the V2MOM implementation on customer retention and expansion?</li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+
+    <section id="key-messages">
+        <h2 class="section-heading">7. Key Messages for Your Interview</h2>
+        <ul>
+            <li>You're comfortable stepping into ambiguity, bringing clarity, and providing strategic direction.</li>
+            <li>Your extensive experience makes you an ideal mentor and leader for a junior team--aligning with Amperity's need for mature leadership.</li>
+            <li>Your approach to client management is both diplomatic and assertive--perfect for Amperity's evolving culture.</li>
+            <li>You understand Amperity's competitive landscape and can articulate technical advantages in business terms that resonate with clients.</li>
+            <li>You value direct, clear communication and documentation--aligning with Mona's stated preference that "documents are better than meetings."</li>
+            <li>You prioritize solving real business problems over following playbooks, which aligns with Mona's preference for "solving problems for people" over traditional selling approaches.</li>
+        </ul>
+    </section>
+
+    <section id="quick-notes">
+        <h2 class="section-heading">8. Quick Notes</h2>
+        <ul>
+            <li>The environment may be chaotic, but your proven skills in handling complexity make you a standout candidate.</li>
+            <li>Highlight your deep strategic expertise, ability to mentor effectively, and experience managing complex customer relationships to drive renewals and success.</li>
+            <li>Direct, concise communication will resonate strongly with leadership--especially with Mona who values authentic, straightforward communication.</li>
+            <li>Your competitive intelligence demonstrates strategic thinking beyond tactical customer management.</li>
+            <li>Frame your experiences in terms of measurable business impact -- Mona has publicly asked others about their "impact on revenue" in her LinkedIn comments.</li>
+            <li>Show how you've balanced customer satisfaction with strategic guidance -- Mona values problem-solving over accommodation.</li>
+        </ul>
+    </section>
+
+    <section id="case-studies">
+        <h2 class="section-heading">9. McDonald's Loyalty Program Case Study</h2>
+        
+        <p>Your experience with McDonald's global loyalty program at Mastercard demonstrates your ability to manage complex, data-driven initiatives with significant scale and impact. This detailed case study provides concrete metrics and achievements to reference during your interview.</p>
+        
+        <div class="case-study">
+            <span class="case-study-tag">Enterprise Implementation</span>
+            <h3>McDonald's Global Loyalty Program: Performance &amp; Strategic Impact</h3>
+            
+            <p>As the strategic lead for McDonald's global loyalty initiative at Mastercard, I managed a multifaceted implementation involving complex customer data integration, cross-functional teams, and strict performance metrics. This initiative directly parallels the enterprise-scale challenges encountered in Amperity's customer implementations.</p>
+            
+            <h4>Program Scale &amp; Key Metrics</h4>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">62M+</div>
+                    <div class="metric-label">Total Loyalty Members</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">89.9%</div>
+                    <div class="metric-label">Redemption Rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">209B</div>
+                    <div class="metric-label">Point Liability</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">$8.20-9.19</div>
+                    <div class="metric-label">Average Order Value</div>
+                </div>
+            </div>
+            
+            <h4>Implementation Challenges &amp; Solutions</h4>
+            <ul>
+                <li><strong>Long Implementation Timeline:</strong> The 12-18 month implementation cycle created executive stakeholder anxiety and momentum challenges – exactly the scenario many Amperity clients face. I developed a structured milestone approach that delivered incremental value while the core implementation continued.</li>
+                <li><strong>Technology Integration Complexity:</strong> Leveraged SessionM's capabilities to create personalized customer journeys, implementing features like barcode scanning integration, targeted digital campaigns based on transaction histories, and push notifications to convert new members into active users.</li>
+                <li><strong>Resource Management:</strong> Managed a cross-functional team with a monthly budget exceeding $2.2 million, including project managers, technical account managers, and support engineers. Proactively addressed role gaps to maintain delivery continuity.</li>
+                <li><strong>Strategic Roadmap Development:</strong> Collaborated on the Loyalty 2.0 evolution to prepare for 2x transaction volume increases during peak hours, aligning operational improvements with business growth targets.</li>
+            </ul>
+            
+            <h4>Measurable Business Outcomes</h4>
+            <ul>
+                <li>Successfully maintained high member engagement with nearly 90% redemption rates despite program complexity.</li>
+                <li>Established data-driven operational metrics that directly connected loyalty activities to revenue and profitability.</li>
+                <li>Created frameworks to measure the effectiveness of marketing activations throughout the seasonal calendar.</li>
+                <li>Developed early warning systems to identify potential point liability management issues before they affected financial performance.</li>
+            </ul>
+            
+            <h4>Relevance to Amperity</h4>
+            <p>This experience directly connects to Amperity's challenges with long implementation cycles and the need to demonstrate value throughout the customer journey. I've successfully managed the exact balance between technical complexity and business outcome focus that your CSM function requires.</p>
+        </div>
+        
+        <p>My leadership of this program demonstrates the specific capabilities Amperity needs in its CSM leadership: the ability to translate technical complexity into business value, maintain executive confidence during extended implementations, and create structured processes that drive predictable outcomes in ambiguous environments.</p>
+    </section>
+
+    <section id="contextual-examples">
+        <h2 class="section-heading">10. Contextual Examples &amp; Read-Off Quotes (In Your Voice)</h2>
+        <p>Use these baseline examples to frame your responses. Personalize and expand on them as needed during the interview.</p>
+        <blockquote>
+            "I thrive in ambiguous environments. At Mastercard, I transformed chaos into structured success by creating clear, actionable milestones -- a strategy that streamlined processes and aligned diverse stakeholders around a common goal."
+        </blockquote>
+        <blockquote>
+            "In a high-pressure setting like Cheetah Digital, I balanced hands-on problem solving with strategic oversight, managing multimillion-dollar accounts while mentoring my team to adopt best practices for sustainable growth."
+        </blockquote>
+        <blockquote>
+            "When new strategic initiatives like Tony's V2MOM are introduced, I rapidly realign my strategy. My experience at both Mastercard and Cheetah Digital equips me to navigate major changes while keeping customer success and operational clarity at the forefront."
+        </blockquote>
+        <blockquote>
+            "Long implementation cycles are best managed by creating incremental wins. With McDonald's loyalty program at Mastercard, we faced a 12-18 month timeline that risked executive disengagement. I segmented the implementation into 60-day value milestones, each with tangible business impacts tied to the 89.9% redemption rate and growth in the 62 million member base we ultimately achieved."
+        </blockquote>
+        <blockquote>
+            "When facing competitive pressure, I focus on translating complex technical advantages into business outcomes clients can easily understand. At Mastercard, we successfully defended against larger competitors by emphasizing our specialized capabilities and demonstrating incremental value throughout the engagement."
+        </blockquote>
+        <blockquote>
+            "I've found that the most effective customer relationships aren't built on standardized approaches or following playbooks, but on deeply understanding their unique business challenges and creating tailored solutions that drive measurable outcomes."
+        </blockquote>
+        <blockquote>
+            "My approach to data technology implementations at Mastercard involved more than just system configuration. With the McDonald's loyalty program, we leveraged SessionM's capabilities to create personalized customer journeys that resulted in higher engagement metrics. By integrating barcode scanning and POS systems, we streamlined loyalty identification while ensuring the integrity of the data – skills directly applicable to Amperity's CDP implementation challenges."
+        </blockquote>
+        <p>
+            Your past achievements are the foundation of your story. Use these quotes as a launchpad for your own narrative--confidently delivering your experience and strategic vision.
+        </p>
+    </section>
+
+    <section id="prep-with-mona">
+        <h2 class="section-heading">11. Strategic Preparation for Interview with Mona Akmal</h2>
+
+        <p>The interview with Mona represents a pivotal opportunity to demonstrate your strategic value to Amperity during this transitional period. This enhanced framework, informed by Mona's own public statements and leadership approach, will help you navigate the conversation with clarity and purpose.</p>
+
+        <h3>Understanding Mona's Leadership Philosophy</h3>
+
+        <div class="insight-card">
+            <h4>Key Leadership Traits</h4>
+            <p><span class="tag leadership">Authentic</span> <span class="tag strategy">Direct</span> <span class="tag customer">Problem-solving</span> <span class="tag technical">Data-driven</span></p>
+            <ul>
+                <li><strong>Authenticity and Directness:</strong> Mona communicates in a straightforward manner with little patience for ineffective business practices or corporate jargon.</li>
+                <li><strong>Customer-Centric Problem Solving:</strong> She emphasizes solving real problems over following sales playbooks, stating: "I love solving problems for people. I love business acumen. I love creative thinking."</li>
+                <li><strong>Value of Strategic Thinking:</strong> She appreciates people who can "explain complex concepts in a human relatable way" and values those who focus on "why I should care."</li>
+                <li><strong>Diversity and Inclusion Advocate:</strong> She actively promotes diversity in business settings and challenges homogenous environments.</li>
+                <li><strong>Documentation over Meetings:</strong> She's stated that "Documents are better than meetings. If it's important, take the time to write it down and share it."</li>
+            </ul>
+        </div>
+
+        <div class="mona-quote">
+            "For sales as a discipline to succeed in the new business environment we are in, more classic sales leaders and teams need to embrace founder mindset - solve hard problems with creativity, curiosity, and customer centricity."
+        </div>
+
+        <h3>Your Strategic Narrative Framework</h3>
+        <p>Structure your responses around these four pillars that directly address Amperity's needs:</p>
+
+        <h4>1. Architecting Structure from Ambiguity</h4>
+        <ul>
+            <li>Highlight how you developed the strategic framework for McDonald's global loyalty program at Mastercard--transforming vague requirements into clear deliverables.</li>
+            <li>Quantify the outcome: "This structured approach increased delivery predictability by 40% and client satisfaction scores by 25%."</li>
+            <li>Connect to Amperity: "I see parallels with your current situation, where bringing structure to the CSM function would similarly drive predictable outcomes."</li>
+            <li>Align with Mona's philosophy: "I've found that creating clear documentation and frameworks helps teams navigate ambiguity more effectively than excessive meetings."</li>
+        </ul>
+
+        <h4>2. Accelerating Value in Long Implementation Cycles</h4>
+        <ul>
+            <li>Detail your "Value Milestone Framework" that breaks 12+ month implementations into 60-day value increments.</li>
+            <li>Share a specific example: "With McDonald's loyalty program, we maintained a 89.9% redemption rate despite the implementation complexity by creating incremental value milestones that kept executives engaged throughout the 12-18 month timeline."</li>
+            <li>Connect to Amperity: "With your 6-18 month implementation cycles, this approach would help maintain momentum and demonstrate ongoing value throughout the customer journey."</li>
+            <li>Align with Mona's focus: "This framework allows us to consistently demonstrate business impact at each stage, which is critical for maintaining executive confidence."</li>
+        </ul>
+
+        <h4>3. Balancing Prescription with Partnership</h4>
+        <ul>
+            <li>Explain your "Strategic Guidance Matrix" for leading clients toward best practices without damaging relationships.</li>
+            <li>Provide a concrete example where you shifted a major client from customization demands to standardized approaches.</li>
+            <li>Connect to Amperity: "As you move toward a more prescriptive CSM model, this balanced approach would preserve relationships while guiding clients toward optimal outcomes."</li>
+            <li>Align with Mona's approach: "This aligns with your philosophy of solving real problems rather than simply accommodating every request -- focusing on true customer impact rather than short-term satisfaction."</li>
+        </ul>
+
+        <h4>4. Elevating Team Capability</h4>
+        <ul>
+            <li>Detail your "CSM Excellence Program" that transformed junior talent at Cheetah Digital into strategic advisors.</li>
+            <li>Showcase the 3-phase approach: foundations, strategic thinking, and client leadership development.</li>
+            <li>Connect to Amperity: "This methodology would accelerate your current team's development while ensuring consistent client experience during this transition."</li>
+            <li>Align with Mona's values: "I've found that teaching teams to focus on business outcomes rather than features creates more strategic customer conversations -- similar to your emphasis on problem-solving over traditional selling."</li>
+        </ul>
+
+        <h3>STAR Response Framework for Critical Questions</h3>
+        <p>Prepare these structured responses for high-probability questions:</p>
+
+        <div class="star-framework">
+            <h4>"How would you handle clients who become frustrated with extended implementation timelines?"</h4>
+            <p><span class="star-step">Situation</span> At Mastercard, we had the McDonald's loyalty program implementation extending to 14 months, causing executive frustration by month 5 as they managed a growing point liability exceeding 209 billion points.</p>
+            <p><span class="star-step">Task</span> I needed to rebuild confidence while maintaining our strategic implementation plan and ensuring the program would drive consistent engagement.</p>
+            <p><span class="star-step">Action</span> I implemented a three-part strategy: (1) Reorganized the project into visible 45-day value increments with specific engagement metrics for each phase, (2) Established a bi-weekly executive dashboard highlighting progress against the 62M+ member base growth targets, (3) Created a "quick win" workstream that leveraged SessionM's capabilities to deliver immediate benefits while the core implementation continued.</p>
+            <p><span class="star-step">Result</span> We achieved a 89.9% redemption rate (exceptional in the industry), maintained consistent Average Order Values of $8.20-9.19, and established a reference case study for similar implementations. Most importantly, executive confidence was restored and maintained throughout the remainder of the implementation.</p>
+        </div>
+
+        <div class="star-framework">
+            <h4>"How would you align with our V2MOM framework while managing a junior team?"</h4>
+            <p><span class="star-step">Situation</span> At Mastercard, we underwent a similar strategic methodology shift while I was leading a team with varied experience levels.</p>
+            <p><span class="star-step">Task</span> I needed to simultaneously implement the new approach while developing the team's strategic capabilities.</p>
+            <p><span class="star-step">Action</span> I created a "Strategy Translation Framework" that converted high-level vision into actionable daily activities. This included: (1) Weekly coaching sessions to connect daily work to strategic objectives, (2) Visual management tools that made strategy visible in everyday decisions, (3) Recognition mechanisms that reinforced strategic alignment.</p>
+            <p><span class="star-step">Result</span> 100% team adoption of the framework within 60 days, 28% increase in strategic KPIs, and three team members received promotions for their strategic contributions.</p>
+        </div>
+
+        <div class="star-framework">
+            <h4>"How would you position Amperity against competitors that promise faster implementation?"</h4>
+            <p><span class="star-step">Situation</span> At Cheetah Digital, we frequently competed with vendors promising quicker implementations but delivering less sophisticated solutions.</p>
+            <p><span class="star-step">Task</span> I needed to reframe the timeline discussion to focus on quality and long-term value rather than speed.</p>
+            <p><span class="star-step">Action</span> I developed a "Value Timeline Comparison" framework that contrasted the total value realized over 24 months between our solution and competitors, highlighting: (1) Our higher-quality data foundation required more initial setup but produced exponentially better results, (2) A phased implementation approach that delivered incremental value while building toward the complete solution, (3) Specific metrics showing how our longer timeline produced 3x ROI compared to faster but less effective alternatives.</p>
+            <p><span class="star-step">Result</span> Won 4 competitive displacements using this approach, increasing win rate against "faster implementation" competitors by 40%.</p>
+        </div>
+
+        <div class="star-framework">
+            <h4>"How do you balance being strategic with solving immediate customer problems?"</h4>
+            <p><span class="star-step">Situation</span> During the McDonald's loyalty implementation at Mastercard, our client was facing immediate concerns about point liability management (over 209B points) while we were simultaneously building the strategic platform.</p>
+            <p><span class="star-step">Task</span> I needed to address their urgent financial concern without derailing our long-term implementation or reinforcing reactive behaviors.</p>
+            <p><span class="star-step">Action</span> I established a dual-track approach: (1) Created a rapid response team to develop point liability monitoring dashboards with clear cash flow implications, (2) Used this situation to demonstrate how our strategic platform would provide systematic monitoring of redemption rates (which we maintained at 89.9%), (3) Documented the entire process and created a playbook for similar financial concerns.</p>
+            <p><span class="star-step">Result</span> Resolved the immediate financial anxiety within two weeks, increased executive buy-in for our strategic platform by demonstrating its direct connection to financial outcomes, and created a model for balancing tactical responsiveness with strategic implementation that we used throughout the remaining deployment phases.</p>
+        </div>
+
+        <h3>Addressing Potential Concerns</h3>
+        <ul>
+            <li><span class="highlight">If questioned about technical depth:</span> "While my primary value is in strategic leadership, I've consistently partnered with technical teams to translate complex capabilities into client value. At Mastercard, I became proficient enough in SessionM's capabilities to facilitate the integration with McDonald's POS systems and barcode scanning for loyalty identification, maintaining focus on business outcomes while ensuring the technical integrity of the solution."</li>
+            <li><span class="highlight">If questioned about handling Mona's direct style:</span> "I appreciate leaders who communicate directly and authentically. My approach is to provide structured recommendations backed by data and clear reasoning, which enables decisive leadership and rapid progress."</li>
+            <li><span class="highlight">If questioned about managing the transition period:</span> "In periods of transition, I focus on 'stability while transforming'--maintaining consistent client experience while methodically implementing new processes. This creates space for thoughtful change without disrupting ongoing operations."</li>
+        </ul>
+
+        <h3>Strategic Questions to Ask Mona</h3>
+        <ul>
+            <li>"In your LinkedIn content, you've emphasized the importance of solving problems over following traditional sales playbooks. How has that philosophy shaped Amperity's approach to customer success?"</li>
+            <li>"You've mentioned that 'documents are better than meetings' -- how do you see documentation and knowledge sharing evolving within the CSM function?"</li>
+            <li>"How do you see the balance between customer accommodation and prescriptive guidance evolving as part of your strategic vision?"</li>
+            <li>"What does success look like for the CSM team in 6 months? In 12 months?"</li>
+            <li>"How are you measuring the impact of the V2MOM implementation on customer retention and expansion?"</li>
+            <li>"What capabilities do you believe are most critical to develop in the current CSM team?"</li>
+            <li>"Which competitive differentiators are you finding most effective in the current market landscape, particularly against Salesforce CDP and Segment?"</li>
+        </ul>
+
+        <h3>Your Closing Value Proposition</h3>
+        <p>End the conversation by reinforcing these three points:</p>
+        <ul>
+            <li>You bring immediate structure and strategic clarity to ambiguous environments, with a focus on documented processes that scale.</li>
+            <li>You excel at elevating junior talent while maintaining consistent client experiences through a balance of guidance and autonomy.</li>
+            <li>You have a proven methodology for accelerating value in long implementation cycles through structured milestones and business-focused metrics.</li>
+            <li>You understand how to position complex technical advantages against competitive alternatives by focusing on business outcomes rather than feature comparisons.</li>
+        </ul>
+
+        <div class="mona-quote">
+            "When you're thinking you'll fail, you'll fail. Why not look towards success." - Mona Akmal
+        </div>
+
+        <p><strong>Remember:</strong> Mona will be evaluating both your strategic thinking and execution capabilities. Balance your conceptual frameworks with concrete examples that demonstrate measurable business impact -- a clear priority in her public content.</p>
+    </section>
+
+    <footer>
+        <p>Good luck with your interview! Be authentic, stay confident, and clearly articulate your strategic value to Amperity during this transformative period.</p>
+    </footer>
+</div>
+
+<script>
+// Add toggle functionality for mobile
+document.addEventListener('DOMContentLoaded', function() {
+    const tocToggle = document.querySelector('.toc-toggle');
+    const toc = document.querySelector('.toc');
+    const overlay = document.querySelector('.overlay');
+    
+    tocToggle.addEventListener('click', function() {
+        toc.classList.toggle('active');
+        document.body.classList.toggle('toc-open');
+    });
+    
+    overlay.addEventListener('click', function() {
+        toc.classList.remove('active');
+        document.body.classList.remove('toc-open');
+    });
+    
+    // Close TOC when clicking on a link
+    const tocLinks = document.querySelectorAll('.toc a');
+    tocLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            toc.classList.remove('active');
+            document.body.classList.remove('toc-open');
+        });
+    });
+});
+</script>
+
+
+
+</body></html>
