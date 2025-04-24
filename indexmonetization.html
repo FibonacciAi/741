@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Geotek | Web3 Revenue Playground</title>
+
+<!-- libs -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<style>
+:root{
+  --bg:#0f172a;--card:#1e293b;--accent:#3b82f6;--accent-light:#60a5fa;
+  --text:#f1f5f9;--muted:#94a3b8;--radius:12px;--shadow:0 6px 16px rgba(0,0,0,.4);
+  --trans:.25s ease;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,Segoe UI,Helvetica,Arial,sans-serif}
+html,body{height:100%}
+body{background:var(--bg);color:var(--text);overflow-x:hidden}
+header{position:sticky;top:0;width:100%;background:#020617aa;backdrop-filter:blur(8px);z-index:100;border-bottom:1px solid #334155}
+.header-inner{max-width:1150px;margin:auto;display:flex;justify-content:space-between;align-items:center;padding:12px 20px}
+.logo{font-weight:700;font-size:24px;letter-spacing:.5px}
+.logo span{color:var(--accent)}
+.hero{padding:60px 20px 30px;text-align:center}
+.hero h1{font-size:42px;margin-bottom:10px;background:linear-gradient(90deg,var(--accent),var(--accent-light));-webkit-background-clip:text;color:transparent}
+.hero p{color:var(--muted)}
+.connect-btn{margin-top:22px;padding:10px 24px;border:none;border-radius:var(--radius);background:var(--accent);color:#fff;font-weight:600;font-size:16px;cursor:pointer;transition:var(--trans)}
+.connect-btn:hover{background:var(--accent-light)}
+.section{max-width:1150px;margin:50px auto;padding:0 20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:24px}
+.card{background:var(--card);padding:24px;border-radius:var(--radius);box-shadow:var(--shadow);position:relative;overflow:hidden;transition:transform var(--trans)}
+.card:hover{transform:translateY(-6px)}
+.card i{font-size:32px;margin-bottom:18px;color:var(--accent)}
+.card h3{font-size:22px;margin-bottom:12px}
+.card p{font-size:15px;color:var(--muted);margin-bottom:18px;min-height:66px}
+.card button{padding:8px 20px;border:none;border-radius:var(--radius);background:#0ea5e9;font-weight:600;color:#fff;cursor:pointer;transition:var(--trans);font-size:14px}
+.card button:hover{background:#38bdf8}
+.details{display:none;margin-top:18px;border-top:1px solid #334155;padding-top:18px;font-size:14px}
+.details.active{display:block;animation:fade .4s}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+input,select{padding:6px 10px;border-radius:8px;border:1px solid #475569;background:#0f172a;color:#e2e8f0}
+.ref-code{font-size:13px;background:#0f172a;border-radius:6px;padding:6px;margin-top:8px;display:inline-block}
+canvas{max-width:100%}
+footer{text-align:center;font-size:12px;color:#475569;margin:60px 0 30px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">Geotek<span>Global</span></div>
+    <button class="connect-btn" id="walletBtn"><i class="fa-solid fa-wallet"></i> Connect Wallet</button>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>Monetize Recruiting<br>—The Web3 Way—</h1>
+  <p>Six revenue engines designed for Base &amp; Farcaster.  Click <em>Demo</em> on any card to play.</p>
+</section>
+
+<section class="section">
+  <div class="grid">
+
+    <!-- 1 Token Pass -->
+    <div class="card" id="passCard">
+      <i class="fa-solid fa-lock"></i>
+      <h3>Enterprise Pass Token</h3>
+      <p>Stake or buy a “GTEK Pro” NFT to unlock premium dashboards, bulk search &amp; 24-hr SLAs.</p>
+      <button onclick="toggle('passDemo')">Demo</button>
+      <div class="details" id="passDemo">
+        <p><strong>Status:</strong> <span id="passStatus">Wallet not connected.</span></p>
+        <button onclick="checkPass()">Check My Pass</button>
+        <button onclick="alert('Redirect → mint.geotek.global')">Mint Pass&nbsp;↗</button>
+      </div>
+    </div>
+
+    <!-- 2 Fees in token -->
+    <div class="card">
+      <i class="fa-solid fa-coins"></i>
+      <h3>$GTEK Fee Discount</h3>
+      <p>Pay your placement fee in $GTEK and shave 12% off the invoice—capital-efficient for both sides.</p>
+      <button onclick="toggle('feeDemo')">Demo</button>
+      <div class="details" id="feeDemo">
+        <label>Annual Salary (USD): </label>
+        <input type="number" id="salary" placeholder="e.g. 160000" oninput="calc()">
+        <p id="feeOut" style="margin-top:10px"></p>
+      </div>
+    </div>
+
+    <!-- 3 Talent NFT -->
+    <div class="card">
+      <i class="fa-solid fa-id-badge"></i>
+      <h3>Verified Talent NFT</h3>
+      <p>Each successful hire is immortalised as an NFT—proof-of-placement shareable on Farcaster.</p>
+      <button onclick="toggle('nftDemo')">Demo</button>
+      <div class="details" id="nftDemo">
+        <img src="https://picsum.photos/seed/gtek/240/240" style="border-radius:8px;border:1px solid #334155">
+        <p style="margin-top:10px">← sample metadata</p>
+        <button onclick="alert('Mint tx sent on Base 📦')">Mint This</button>
+      </div>
+    </div>
+
+    <!-- 4 Data marketplace -->
+    <div class="card">
+      <i class="fa-solid fa-chart-line"></i>
+      <h3>Talent Insights Index</h3>
+      <p>Sell anonymised salary &amp; hiring velocity dashboards as NFT-gated reports to VCs &amp; corp dev.</p>
+      <button onclick="toggle('chartWrap');renderChart()">Demo</button>
+      <div class="details" id="chartWrap">
+        <canvas id="statsChart" height="200"></canvas>
+      </div>
+    </div>
+
+    <!-- 5 Ambassador -->
+    <div class="card">
+      <i class="fa-solid fa-users"></i>
+      <h3>Ambassador Rewards</h3>
+      <p>Earn $GTEK for each referred client or engineer—tracked on-chain for bullet-proof transparency.</p>
+      <button onclick="toggle('refDemo');genRef()">Demo</button>
+      <div class="details" id="refDemo">
+        <p>Your unique referral code:</p>
+        <span class="ref-code" id="refCode">••••</span>
+        <p style="margin-top:10px"><button onclick="navigator.clipboard.writeText(location.href+'?ref='+document.getElementById('refCode').innerText)">Copy&nbsp;Link</button></p>
+      </div>
+    </div>
+
+    <!-- 6 Token-gated event -->
+    <div class="card">
+      <i class="fa-solid fa-calendar-check"></i>
+      <h3>Token-Gated Roundtables</h3>
+      <p>Quarterly live &amp; virtual meet-ups. Hold ≥50 $GTEK or an Enterprise Pass NFT to RSVP.</p>
+      <button onclick="toggle('eventDemo')">Demo</button>
+      <div class="details" id="eventDemo">
+        <p><strong>Next:</strong> Base HQ, NYC – May 22, 2025<br>Seats left: <span id="seats">12</span></p>
+        <button onclick="rsvp()">RSVP with Wallet</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>© 2025 Geotek Global Recruiting. Base-native. Built by Dimitri × ChatGPT.</footer>
+
+<script>
+/* helpers ------------------------------------------------------*/
+const toggle = id=>{
+  document.getElementById(id).classList.toggle('active');
+};
+let provider;
+async function connect(){
+  if(window.ethereum){
+    provider=new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts",[]);
+    document.getElementById('walletBtn').innerHTML="✔ Wallet Connected";
+  }else alert('No wallet detected');
+}
+document.getElementById('walletBtn').onclick=connect;
+
+/* 1 Pass check (stubbed) --------------------------------------*/
+function checkPass(){
+  const passStatus=document.getElementById('passStatus');
+  passStatus.innerText="Checking token balance…";
+  setTimeout(()=>{
+    // demo = always false
+    passStatus.innerText="No Pass found – please mint.";
+  },900);
+}
+
+/* 2 Fee calculator --------------------------------------------*/
+function calc(){
+  const salary=+document.getElementById('salary').value||0;
+  if(!salary){document.getElementById('feeOut').innerText='';return;}
+  const usd=salary*0.20;
+  const gtek=usd*0.88;
+  document.getElementById('feeOut').innerHTML=
+    `Traditional fee: <strong>$${usd.toLocaleString()}</strong><br>
+     Pay in <span style="color:#38bdf8;font-weight:600">$GTEK</span> → <strong>$${gtek.toLocaleString()}</strong>`;
+}
+
+/* 3 Chart demo -------------------------------------------------*/
+let chartInit=false;
+function renderChart(){
+  if(chartInit) return;
+  const ctx=document.getElementById('statsChart');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['Solidity','Rust','Full-Stack','ZK','DevRel'],
+      datasets:[{
+        label:'Avg. Salary (USD k)',
+        data:[185,175,160,195,150]
+      },{
+        label:'Avg. Days-to-Fill',
+        data:[14,18,21,25,17]
+      }]
+    },
+    options:{plugins:{legend:{labels:{color:'#e2e8f0'}}},scales:{x:{ticks:{color:'#e2e8f0'}},y:{ticks:{color:'#e2e8f0'}}}}
+  });
+  chartInit=true;
+}
+
+/* 5 Referral code ---------------------------------------------*/
+function genRef(){
+  document.getElementById('refCode').innerText='GTEK-'+Math.random().toString(36).slice(-6).toUpperCase();
+}
+
+/* 6 RSVP -------------------------------------------------------*/
+function rsvp(){
+  if(!provider){alert('Connect wallet first');return;}
+  let seats=document.getElementById('seats');
+  if(+seats.innerText===0){alert('Sold out');return;}
+  seats.innerText=+seats.innerText-1;
+  alert('🎟  RSVP recorded on-chain!\nSee you in NYC.');
+}
+</script>
+</body>
+</html>
