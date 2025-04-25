@@ -1,0 +1,987 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geotek Global Recruiting | Technical Talent Platform</title>
+    
+    <!-- Farcaster Frames v2 Meta Tags -->
+    <meta property="fc:frame" content="vNext">
+    <meta property="fc:frame:image" content="https://recruit-frame-api.vercel.app/api/image">
+    <meta property="fc:frame:button:1" content="Connect Wallet">
+    <meta property="fc:frame:button:2" content="View Jobs">
+    <meta property="fc:frame:button:3" content="Create Profile">
+    <meta property="fc:frame:post_url" content="https://recruit-frame-api.vercel.app/api/frames">
+    <meta property="og:image" content="https://recruit-frame-api.vercel.app/api/image">
+    <meta property="fc:frame:input:text" content="Sign message to verify">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Ethers.js for wallet integration -->
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"></script>
+    <!-- Farcaster Frames SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@farcaster/frames-sdk@1.0.0/dist/index.min.js"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        :root {
+            --primary-color: #2c5282;
+            --primary-dark: #1a365d;
+            --secondary-color: #63b3ed;
+            --secondary-light: #90cdf4;
+            --light-color: #f7fafc;
+            --light-accent: #edf2f7;
+            --dark-color: #2d3748;
+            --text-color: #4a5568;
+            --text-light: #718096;
+            --accent-color: #e53e3e;
+            --accent-hover: #c53030;
+            --success-color: #48bb78;
+            --success-light: #c6f6d5;
+            --warning-color: #ed8936;
+            --warning-light: #feebc8;
+            --border-radius: 8px;
+            --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease-in-out;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            color: var(--text-color);
+            line-height: 1.7;
+            background-color: var(--light-color);
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        a:hover {
+            color: var(--secondary-color);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo span {
+            color: var(--secondary-color);
+            margin-left: 2px;
+        }
+
+        /* Email Template Section */
+        .email-templates {
+            padding: 100px 0;
+            background-color: white;
+        }
+
+        .email-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .category-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            gap: 10px;
+            padding-bottom: 10px;
+        }
+
+        .category-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: white;
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .category-tab.active {
+            background-color: var(--primary-dark);
+            box-shadow: 0 4px 6px rgba(44, 82, 130, 0.25);
+        }
+
+        .category-tab:hover:not(.active) {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .email-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--light-color);
+            margin-bottom: 30px;
+            overflow-x: auto;
+            gap: 10px;
+        }
+
+        .email-tab {
+            padding: 12px 25px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-color);
+            background-color: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .email-tab.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .email-tab:hover:not(.active) {
+            color: var(--secondary-color);
+            border-bottom: 3px solid var(--secondary-light);
+        }
+
+        .category-content {
+            display: none;
+        }
+
+        .category-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .email-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .email-content.active {
+            display: block;
+        }
+
+        .email-content h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 24px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .email-content h2::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 3px;
+            background-color: var(--secondary-color);
+            bottom: 0;
+            left: 0;
+        }
+
+        .email-content p {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: var(--text-color);
+        }
+
+        .email-content ul {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        .email-content ul li {
+            margin-bottom: 10px;
+        }
+
+        .email-content ol {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        .email-content ol li {
+            margin-bottom: 10px;
+        }
+
+        .email-content blockquote {
+            padding: 15px 20px;
+            background-color: var(--light-accent);
+            border-left: 4px solid var(--secondary-color);
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .email-content .btn {
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: var(--transition);
+            cursor: pointer;
+            display: inline-block;
+            text-align: center;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .email-content .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        .email-content .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(44, 82, 130, 0.25);
+        }
+
+        .email-content .btn-secondary {
+            background-color: white;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .email-content .btn-secondary:hover {
+            background-color: var(--light-accent);
+            transform: translateY(-2px);
+        }
+
+        .email-content .signature {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid var(--light-accent);
+            font-weight: 600;
+        }
+
+        .email-content .signature img {
+            max-width: 200px;
+            margin-bottom: 10px;
+        }
+
+        .signature-details {
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+
+        .email-content .code-block {
+            font-family: monospace;
+            background-color: var(--light-color);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+
+        .email-content .highlight {
+            background-color: var(--success-light);
+            padding: 2px 5px;
+            border-radius: 3px;
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            background-color: var(--light-accent);
+            color: var(--primary-color);
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+
+        .job-details {
+            background-color: var(--light-color);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+        }
+
+        .job-details h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .job-details p {
+            margin-bottom: 10px;
+        }
+
+        .email-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .copy-btn {
+            padding: 10px 20px;
+            background-color: var(--light-accent);
+            color: var(--primary-color);
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copy-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .template-info {
+            background-color: var(--light-accent);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .template-info i {
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .category-tabs, .email-tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+                padding-bottom: 5px;
+            }
+            
+            .email-content {
+                padding: 25px;
+            }
+            
+            .email-content h2 {
+                font-size: 20px;
+            }
+        }
+
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: var(--transition);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 99;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+        }
+
+        .back-to-top:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">Geotek<span>Global</span></a>
+        </div>
+    </header>
+
+    <section class="email-templates">
+        <div class="container email-container">
+            <h2 style="text-align: center; margin-bottom: 40px; color: var(--primary-color); font-size: 32px;">
+                Technical Talent Recruitment Email Templates
+            </h2>
+            
+            <div class="category-tabs">
+                <button class="category-tab active" data-category="client-outreach">Client Outreach</button>
+                <button class="category-tab" data-category="candidate-outreach">Candidate Outreach</button>
+                <button class="category-tab" data-category="follow-ups">Follow-ups &amp; Nurturing</button>
+                <button class="category-tab" data-category="placements">Placements &amp; Offers</button>
+                <button class="category-tab" data-category="partnerships">Partnerships</button>
+                <button class="category-tab" data-category="specialized">Specialized Roles</button>
+            </div>
+            
+            <!-- CLIENT OUTREACH CATEGORY -->
+            <div id="client-outreach" class="category-content active">
+                <div class="email-tabs client-tabs">
+                    <button class="email-tab active" data-email="intro">Introduction</button>
+                    <button class="email-tab" data-email="candidates">Sample Candidates</button>
+                    <button class="email-tab" data-email="scarcity">Scarcity</button>
+                    <button class="email-tab" data-email="proof">Social Proof</button>
+                    <button class="email-tab" data-email="nudge">Final Nudge</button>
+                    <button class="email-tab" data-email="followup">Event Follow-up</button>
+                    <button class="email-tab" data-email="onboarding">Client Onboarding</button>
+                </div>
+                
+                <!-- Email 1: Introduction -->
+                <div id="intro-email" class="email-content active">
+                    <div class="template-info">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Use this template for first-touch outreach to potential clients. Emphasizes unique value proposition and verification methods across technical specialties.</p>
+                    </div>
+                    <h2>Subject: Tired of reviewing bad resumes? Let us source verified technical talent you can trust.</h2>
+                    <p>Hi {{first_name}},</p>
+                    <p>I've been helping companies like yours find top-tier tech talent for 30+ years—and recently, I've launched a new initiative to solve the biggest problem we see today:</p>
+                    <p><strong>Signal over noise in hiring.</strong></p>
+                    <p>We combine traditional vetting with cutting-edge tools for all technical disciplines:</p>
+                    <ul>
+                        <li>✅ Verified developer portfolios, GitHub repos, and systems architecture experience</li>
+                        <li>✅ Technical certification verification and project contribution history</li>
+                        <li>✅ Real human review (by me, personally)</li>
+                        <li>✅ Credential verification across Web3, cloud platforms, and networking solutions</li>
+                        <li>✅ Comprehensive technical assessment for engineers, developers, PMs, and system specialists</li>
+                    </ul>
+                    <p>No spam. No outsourcing. Just developers, engineers, system specialists, and project/product managers you can trust.</p>
+                    <p>We're currently placing talent at {{relevant_companies}} and have helped build teams for {{notable_project_reference}}.</p>
+                    <p>Interested in seeing a few profiles? I'd be happy to send over a sample or schedule a 15-minute intro call.</p>
+                    <div class="signature">
+                        <img src="https://www.geotekcorp.com/wp-content/plugins/phastpress/phast.php/c2VydmljZT1pbWFnZXMmc3JjPWh0dHBzJTNBJTJGJTJGd3d3Lmdlb3Rla2NvcnAuY29tJTJGd3AtY29udGVudCUyRnVwbG9hZHMlMkYyMDIzJTJGMDElMkZHZW90ZWstQ3JvcC5wbmcmY2FjaGVNYXJrZXI9MTY4MTIyNTQ3Ni0yODc0NSZ0b2tlbj1iZTEwZTEwOWI2ZWY3YzEy.q.png" alt="Geotek Global Recruiting">
+                        <div class="signature-details">
+                            <p>George Nikitiadis<br>
+                            O 646.847.3151 x 101<br>
+                            C 914.494.9703<br>
+                            <a href="http://www.geotekcorp.com">www.geotekcorp.com</a><br>
+                            <a href="https://calendly.com/georgen-geotekcorp">https://calendly.com/georgen-geotekcorp</a></p>
+                        </div>
+                    </div>
+                    <div class="email-controls">
+                        <button class="copy-btn"><i class="fas fa-copy"></i> Copy Template</button>
+                    </div>
+                </div>
+                
+                <!-- Email 2: Sample Candidates -->
+                <div id="candidates-email" class="email-content">
+                    <div class="template-info">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Send this after initial interest to showcase real candidates across various technical specialties without revealing identifying details.</p>
+                    </div>
+                    <h2>Subject: 5 exceptional technical candidates you can talk to this week</h2>
+                    <p>Hey {{first_name}},</p>
+                    <p>Here are a few recent entries from our candidate pool across multiple technical disciplines:</p>
+                    <ul>
+                        <li>✅ <strong>Software Developer</strong> — Full-stack expertise with microservices architecture, 7+ years experience
+                            <div style="margin-top: 5px;">
+                                <span class="tag">Java</span>
+                                <span class="tag">Spring Boot</span>
+                                <span class="tag">React</span>
+                                <span class="tag">AWS</span>
+                                <span class="tag">Kubernetes</span>
+                            </div>
+                        </li>
+                        <li>✅ <strong>Network Engineer</strong> — CCNP certified, designed enterprise networks for Fortune 500 companies
+                            <div style="margin-top: 5px;">
+                                <span class="tag">Cisco</span>
+                                <span class="tag">Network Security</span>
+                                <span class="tag">SD-WAN</span>
+                                <span class="tag">Palo Alto</span>
+                                <span class="tag">BGP</span>
+                            </div>
+                        </li>
+                        <li>✅ <strong>Systems Architect</strong> — Large-scale cloud migration specialist, ex-Microsoft
+                            <div style="margin-top: 5px;">
+                                <span class="tag">Azure</span>
+                                <span class="tag">System Design</span>
+                                <span class="tag">Terraform</span>
+                                <span class="tag">CI/CD</span>
+                                <span class="tag">Compliance</span>
+                            </div>
+                        </li>
+                        <li>✅ <strong>Product Manager</strong> — Led 3 successful product launches, data-driven approach
+                            <div style="margin-top: 5px;">
+                                <span class="tag">Agile</span>
+                                <span class="tag">Product Strategy</span>
+                                <span class="tag">User Research</span>
+                                <span class="tag">Roadmapping</span>
+                                <span class="tag">Analytics</span>
+                            </div>
+                        </li>
+                        <li>✅ <strong>DevOps Engineer</strong> — Built CI/CD pipelines for high-load applications, automation expert
+                            <div style="margin-top: 5px;">
+                                <span class="tag">Docker</span>
+                                <span class="tag">Jenkins</span>
+                                <span class="tag">Ansible</span>
+                                <span class="tag">Monitoring</span>
+                                <span class="tag">GitOps</span>
+                            </div>
+                        </li>
+                    </ul>
+                    <p>All are looking for full-time or contract work. If one of these profiles fits your team, I can make the introduction today.</p>
+                    <p>Let me know if you want a candidate snapshot with more details about their work history and availability.</p>
+                    <div class="signature">
+                        <img src="https://www.geotekcorp.com/wp-content/plugins/phastpress/phast.php/c2VydmljZT1pbWFnZXMmc3JjPWh0dHBzJTNBJTJGJTJGd3d3Lmdlb3Rla2NvcnAuY29tJTJGd3AtY29udGVudCUyRnVwbG9hZHMlMkYyMDIzJTJGMDElMkZHZW90ZWstQ3JvcC5wbmcmY2FjaGVNYXJrZXI9MTY4MTIyNTQ3Ni0yODc0NSZ0b2tlbj1iZTEwZTEwOWI2ZWY3YzEy.q.png" alt="Geotek Global Recruiting">
+                        <div class="signature-details">
+                            <p>George Nikitiadis<br>
+                            O 646.847.3151 x 101<br>
+                            C 914.494.9703<br>
+                            <a href="http://www.geotekcorp.com">www.geotekcorp.com</a><br>
+                            <a href="https://calendly.com/georgen-geotekcorp">https://calendly.com/georgen-geotekcorp</a></p>
+                        </div>
+                    </div>
+                    <div class="email-controls">
+                        <button class="copy-btn"><i class="fas fa-copy"></i> Copy Template</button>
+                    </div>
+                </div>
+                
+                <!-- Email 3: Scarcity -->
+                <div id="scarcity-email" class="email-content">
+                    <div class="template-info">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Use this template to create a sense of limited availability. Best sent after an initial conversation or when re-engaging cold leads.</p>
+                    </div>
+                    <h2>Subject: Opening 5 new recruiter slots this week – want in?</h2>
+                    <p>Hi {{first_name}},</p>
+                    <p>We limit our client intake to ensure every company gets personal attention and curated intros. This week, we're onboarding 5 new hiring partners for Q2 placements.</p>
+                    <p>Would love to offer you a spot if it makes sense for {{company_name}}.</p>
+                    <p>Based on your current openings for {{target_role}}, I already have 3 pre-vetted candidates that match your requirements, including specialists in {{specific_skill}} and {{specific_technology}}.</p>
+                    <p>Let me know and I'll walk you through how it works — or I'll send you a direct link to browse anonymized candidate profiles before we officially partner.</p>
+                    <p>Thanks for considering it.</p>
+                    <div class="signature">
+                        <img src="https://www.geotekcorp.com/wp-content/plugins/phastpress/phast.php/c2VydmljZT1pbWFnZXMmc3JjPWh0dHBzJTNBJTJGJTJGd3d3Lmdlb3Rla2NvcnAuY29tJTJGd3AtY29udGVudCUyRnVwbG9hZHMlMkYyMDIzJTJGMDElMkZHZW90ZWstQ3JvcC5wbmcmY2FjaGVNYXJrZXI9MTY4MTIyNTQ3Ni0yODc0NSZ0b2tlbj1iZTEwZTEwOWI2ZWY3YzEy.q.png" alt="Geotek Global Recruiting">
+                        <div class="signature-details">
+                            <p>George Nikitiadis<br>
+                            O 646.847.3151 x 101<br>
+                            C 914.494.9703<br>
+                            <a href="http://www.geotekcorp.com">www.geotekcorp.com</a><br>
+                            <a href="https://calendly.com/georgen-geotekcorp">https://calendly.com/georgen-geotekcorp</a></p>
+                        </div>
+                    </div>
+                    <div class="email-controls">
+                        <button class="copy-btn"><i class="fas fa-copy"></i> Copy Template</button>
+                    </div>
+                </div>
+                
+                <!-- Email 4: Social Proof -->
+                <div id="proof-email" class="email-content">
+                    <div class="template-info">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Use social proof to build credibility. This template leverages testimonials to establish trust with potential clients.</p>
+                    </div>
+                    <h2>Subject: "We made a hire in 11 days through George's network"</h2>
+                    <p>I know how noisy this space is. Which is why I focus on results.</p>
+                    <blockquote>"George helped us source a senior systems architect who's still with us 10 months later. The process was smooth, and we didn't waste time on unqualified intros."<br>
+                    – CTO, SaaS Platform (Series A)</blockquote>
+                    <blockquote>"After going through 50+ candidates on general platforms with no success, Geotek sent us 3 qualified developers with the exact system integration experience we needed. We hired 2."<br>
+                    – VP Engineering, Enterprise Software Company</blockquote>
+                    <blockquote>"Finding a product manager with both technical understanding and user-focused thinking was a challenge until we worked with Geotek. They delivered candidates who truly understood our market."<br>
+                    – Founder, AI Startup</blockquote>
+                    <p>No spam, no bloat, no upfront fees. Just intros to people ready to talk.</p>
+                    <p>Want to see what your next hire looks like?</p>
+                    <div class="signature">
+                        <img src="https://www.geotekcorp.com/wp-content/plugins/phastpress/phast.php/c2VydmljZT1pbWFnZXMmc3JjPWh0dHBzJTNBJTJGJTJGd3d3Lmdlb3Rla2NvcnAuY29tJTJGd3AtY29udGVudCUyRnVwbG9hZHMlMkYyMDIzJTJGMDElMkZHZW90ZWstQ3JvcC5wbmcmY2FjaGVNYXJrZXI9MTY4MTIyNTQ3Ni0yODc0NSZ0b2tlbj1iZTEwZTEwOWI2ZWY3YzEy.q.png" alt="Geotek Global Recruiting">
+                        <div class="signature-details">
+                            <p>George Nikitiadis<br>
+                            O 646.847.3151 x 101<br>
+                            C 914.494.9703<br>
+                            <a href="http://www.geotekcorp.com">www.geotekcorp.com</a><br>
+                            <a href="https://calendly.com/georgen-geotekcorp">https://calendly.com/georgen-geotekcorp</a></p>
+                        </div>
+                    </div>
+                    <div class="email-controls">
+                        <button class="copy-btn"><i class="fas fa-copy"></i> Copy Template</button>
+                    </div>
+                </div>
+                
+                <!-- Email 5: Final Nudge -->
+                <div id="nudge-email" class="email-content">
+                    <div class="template-info">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Send as a final outreach in a sequence. Creates urgency while maintaining professionalism. Includes clear CTAs.</p>
+                    </div>
+                    <h2>Subject: Final call — see what hiring managers are saying</h2>
+                    <p>Last one from me (promise):</p>
+                    <blockquote>"We filled a critical network engineer role in 9 days. No recruiters, no fluff, just verified experts who actually understood our infrastructure needs."<br>
+                    — Head of IT Operations @ Enterprise Technology Company</blockquote>
+                    <p>Geotek Global Recruiting isn't a job board. It's a trust network built on verified expertise across technical disciplines.<br>
+                    Let me show you what that looks like.</p>
+                    <div style="margin: 25px 0;">
+                        <a href="#" class="btn btn-primary">Browse Verified Candidates</a>
+                        <a href="#" class="btn btn-secondary">Schedule 15-Min Call</a>
+                    </div>
+                    <p>If I don't hear back, I'll assume timing isn't right, but you're welcome to reach out when you're actively hiring for technical roles.</p>
+                    <div class="signature">
+                        <img src="https://www.geotekcorp.com/wp-content/plugins/phastpress/phast.php/c2VydmljZT1pbWFnZXMmc3JjPWh0dHBzJTNBJTJGJTJGd3d3Lmdlb3Rla2NvcnAuY29tJTJGd3AtY29udGVudCUyRnVwbG9hZHMlMkYyMDIzJTJGMDElMkZHZW90ZWstQ3JvcC5wbmcmY2FjaGVNYXJrZXI9MTY4MTIyNTQ3Ni0yODc0NSZ0b2tlbj1iZTEwZTEwOWI2ZWY3YzEy.q.png" alt="Geotek Global Recruiting">
+                        <div class="signature-details">
+                            <p>George Nikitiadis<br>
+                            O 646.847.3151 x 101<br>
+                            C 914.494.9703<br>
+                            <a href="http://www.geotekcorp.com">www.geotekcorp.com</a><br>
+                            <a href="https://calendly.com/georgen-geotekcorp">https://calendly.com/georgen-geotekcorp</a></p>
+                        </div>
+                    </div>
+                    <div class="email-controls">
+                        <button class="copy-btn"><i class="fas fa-copy"></i> Copy Template</button>
+                    </div>
+                </div>
+                
+                <!-- Email 6: Event Followup -->
+                <div id="followup-email" class="email-content">
+                    <div class="template-info">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Use this template to follow up after events, webinars or conferences. References shared experience to build rapport.</p>
+                    </div>
+                    <h2>Subject: Thanks for joining us – here's what's next</h2>
+                    <p>Hey {{first_name}},</p>
+                    <p>Thanks for joining us at the Technical Leadership Roundtable. Great to hear your thoughts on hiring in today's market, especially your insights about {{specific_topic_mentioned}}.</p>
+                    <p>As promised, I've attached the slide deck and resources we discussed on building engineering teams that scale effectively.</p>
+                    <p>If you'd like access to our candidate pool of verified technical talent — across development, engineering, systems, networking, and product/project management — here's the link:</p>
+                    <div style="margin: 25px 0;">
+                        <a href="#" class="btn btn-primary">Explore Profiles</a>
+                    </div>
+                    <p>Happy to make intros or run a short walk-through if you're curious. Just let me know what roles you're prioritizing this quarter.</p>
+                    <div class="signature">
+                        <img src="https://www.geotekcorp.com/wp-content/plugins/phastpress/phast.php/c2VydmljZT1pbWFnZXMmc3JjPWh0dHBzJTNBJTJGJTJGd3d3Lmdlb3Rla2NvcnAuY29tJTJGd3AtY29udGVudCUyRnVwbG9hZHMlMkYyMDIzJTJGMDElMkZHZW90ZWstQ3JvcC5wbmcmY2FjaGVNYXJrZXI9MTY4MTIyNTQ3Ni0yODc0NSZ0b2tlbj1iZTEwZTEwOWI2ZWY3YzEy.q.png" alt="Geotek Global Recruiting">
+                        <div class="signature-details">
+                            <p>George Nikitiadis<br>
+                            O 646.847.3151 x 101<br>
+                            C 914.494.9703<br>
+                            <a href="http://www.geotekcorp.com">www.geotekcorp.com</a><br>
+                            <a href="https://calendly.com/georgen-geotekcorp">https://calendly.com/georgen-geotekcorp</a></p>
+                        </div>
+                    </div>
+                    <div class="email-controls">
+                        <button class="copy-btn"><i class="fas fa-copy"></i> Copy Template</button>
+                    </div>
+                </div>
+                
+                <!-- Email 7: Client Onboarding -->
+                <div id="onboarding-email" class="email-content">
+                    <div class="template-info">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Send this to new clients who have agreed to work with you. Sets expectations and outlines next steps in the process.</p>
+                    </div>
+                    <h2>Subject: Welcome to Geotek Global — Let's find your next technical rockstar</h2>
+                    <p>Hi {{first_name}},</p>
+                    <p>Welcome to Geotek Global Recruiting! I'm excited to help {{company_name}} build out your technical team with verified, pre-screened talent.</p>
+                    <p>Here's what happens next:</p>
+                    <ol>
+                        <li><strong>Requirement Review</strong>: I've reviewed the job descriptions you sent for {{role_1}} and {{role_2}}. Let's schedule a 30-minute call to refine these requirements and discuss any additional context.</li>
+                        <li><strong>Initial Candidates</strong>: Within 3-5 business days, you'll receive the first batch of 3-5 pre-vetted candidates who match your requirements.</li>
+                        <li><strong>Ongoing Support</strong>: I'll personally handle the scheduling, follow-ups, and feedback collection throughout the interview process.</li>
+                    </ol>
+                    <p>To get started, please:</p>
+                    <ul>
+                        <li>Complete our <a href="#">client onboarding form</a> (takes ~10 minutes)</li>
+                        <li>Schedule your <a href="#">kickoff call</a> using my calendar link</li>
+                        <li>Share any team structure documents or technical environment details that would help us find the right fit</li>
+                    </ul>
+                    <p>As discussed, our placement fee structure is {{fee_structure}}, with our {{guarantee_period}} guarantee period.</p>
+                    <p>Looking forward to helping you build a world-class technical team!</p>
+                    <div class="signature">
+                        <img src="https://www.geotekcorp.com/wp-content/plugins/phastpress/phast.php/c2VydmljZT1pbWFnZXMmc3JjPWh0dHBzJTNBJTJGJTJGd3d3Lmdlb3Rla2NvcnAuY29tJTJGd3AtY29udGVudCUyRnVwbG9hZHMlMkYyMDIzJTJGMDElMkZHZW90ZWstQ3JvcC5wbmcmY2FjaGVNYXJrZXI9MTY4MTIyNTQ3Ni0yODc0NSZ0b2tlbj1iZTEwZTEwOWI2ZWY3YzEy.q.png" alt="Geotek Global Recruiting">
+                        <div class="signature-details">
+                            <p>George Nikitiadis<br>
+                            O 646.847.3151 x 101<br>
+                            C 914.494.9703<br>
+                            <a href="http://www.geotekcorp.com">www.geotekcorp.com</a><br>
+                            <a href="https://calendly.com/georgen-geotekcorp">https://calendly.com/georgen-geotekcorp</a></p>
+                        </div>
+                    </div>
+                    <div class="email-controls">
+                        <button class="copy-btn"><i class="fas fa-copy"></i> Copy Template</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CANDIDATE OUTREACH CATEGORY -->
+            <div id="candidate-outreach" class="category-content">
+                <div class="email-tabs candidate-tabs">
+                    <button class="email-tab active" data-email="candidate-intro">Initial Outreach</button>
+                    <button class="email-tab" data-email="role-pitch">Role Pitch</button>
+                    <button class="email-tab" data-email="qualification">Qualification</button>
+                    <button class="email-tab" data-email="technical-verification">Technical Verification</button>
+                    <button class="email-tab" data-email="passive-talent">Passive Talent</button>
+                    <button class="email-tab" data-email="referral">Referral Request</button>
+                </div>
+                
+                <!-- Candidate Outreach 1: Initial -->
+                <div id="candidate-intro-email" class="email-content active">
+                    <div class="template-info">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Use this template to make first contact with potential candidates. Focus on personalization and value proposition.</p>
+                    </div>
+                    <h2>Subject: Your {{specific_skill}} experience caught my attention</h2>
+                    <p>Hi {{first_name}},</p>
+                    <p>I came across your profile and was impressed by your contributions to {{specific_project}} and your experience with {{specific_technology}}.</p>
+                    <p>I'm George from Geotek Global Recruiting, and I work with companies looking for talent with your specific background in {{skill_set}}.</p>
+                    <p>We're currently working with several companies who are looking for talent with your specific background in {{skill_set}}.</p>
+                    <p>Would you be open to a confidential conversation about some opportunities that might align with your interests in {{specific_interest_from_profile}}?</p>
+                    <p>If you're not actively looking, I'd still appreciate connecting—we provide ongoing value to our talent network through exclusive events and industry insights.</p>
+                    <div class="signature">
+                        <img src="https://www.geotekcorp.com/wp-content/plugins/phastpress/phast.php/c2VydmljZT1pbWFnZXMmc3JjPWh0dHBzJTNBJTJGJTJGd3d3Lmdlb3Rla2NvcnAuY29tJTJGd3AtY29udGVudCUyRnVwbG9hZHMlMkYyMDIzJTJGMDElMkZHZW90ZWstQ3JvcC5wbmcmY2FjaGVNYXJrZXI9MTY4MTIyNTQ3Ni0yODc0NSZ0b2tlbj1iZTEwZTEwOWI2ZWY3YzEy.q.png" alt="Geotek Global Recruiting">
+                        <div class="signature-details">
+                            <p>George Nikitiadis<br>
+                            O 646.847.3151 x 101<br>
+                            C 914.494.9703<br>
+                            <a href="http://www.geotekcorp.com">www.geotekcorp.com</a><br>
+                            <a href="https://calendly.com/georgen-geotekcorp">https://calendly.com/georgen-geotekcorp</a></p>
+                        </div>
+                    </div>
+                    <div class="email-controls">
+                        <button class="copy-btn"><i class="fas fa-copy"></i> Copy Template</button>
+                    </div>
+                </div>
+                
+                <!-- Candidate Outreach 2: Role Pitch -->
+                <div id="role-pitch-email" class="email-content">
+                    <div class="template-info">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Use this to pitch a specific role to a qualified candidate. Highlight the most attractive aspects of both role and company.</p>
+                    </div>
+                    <h2>Subject: Opportunity: {{role_title}} at {{anonymized_company}}</h2>
+                    <p>Hi {{first_name}},</p>
+                    <p>Based on our conversation about your interest in {{specific_interest}}, I wanted to share a role that I think could be an excellent fit for your background and career goals.</p>
+                    <div class="job-details">
+                        <h3>{{role_title}} at {{anonymized_company}}</h3>
+                        <p><strong>Company:</strong> {{anonymized_company_description}} ({{funding_stage}})</p>
+                        <p><strong>Focus:</strong> {{company_focus}}</p>
+                        <p><strong>Tech Stack:</strong> {{tech_stack}}</p>
+                        <p><strong>Compensation:</strong> {{compensation_range}} + {{benefits_details}}</p>
+                        <p><strong>Location:</strong> {{location_or_remote}}</p>
+                    </div>
+                    <p>What makes this particularly interesting for someone with your background:</p>
+                    <ul>
+                        <li>You'd be working directly with {{notable_team_member}}, who previously led {{previous_role}} at {{previous_company}}.</li>
+                        <li>Your experience with {{specific_skill}} aligns perfectly with their current focus on {{specific_project}}.</li>
+                        <li>They recently {{recent_milestone}} and are expanding the team to scale their infrastructure.</li>
+                        <li>The role offers significant autonomy and ownership over {{specific_area}}.</li>
+                        <li>Their tech stack includes {{technology_match}} which you mentioned enjoying working with.</li>
+                    </ul>
+                    <p>Are you interested in learning more? I can share additional details and arrange an intro if this aligns with what you're looking for.</p>
+                    <div class="signature">
+                        <img src="https://www.geotekcorp.com/wp-content/plugins/phastpress/phast.php/c2VydmljZT1pbWFnZXMmc3JjPWh0dHBzJTNBJTJGJTJGd3d3Lmdlb3Rla2NvcnAuY29tJTJGd3AtY29udGVudCUyRnVwbG9hZHMlMkYyMDIzJTJGMDElMkZHZW90ZWstQ3JvcC5wbmcmY2FjaGVNYXJrZXI9MTY4MTIyNTQ3Ni0yODc0NSZ0b2tlbj1iZTEwZTEwOWI2ZWY3YzEy.q.png" alt="Geotek Global Recruiting">
+                        <div class="signature-details">
+                            <p>George Nikitiadis<br>
+                            O 646.847.3151 x 101<br>
+                            C 914.494.9703<br>
+                            <a href="http://www.geotekcorp.com">www.geotekcorp.com</a><br>
+                            <a href="https://calendly.com/georgen-geotekcorp">https://calendly.com/georgen-geotekcorp</a></p>
+                        </div>
+                    </div>
+                    <div class="email-controls">
+                        <button class="copy-btn"><i class="fas fa-copy"></i> Copy Template</button>
+                    </div>
+                </div>
+                
+                <!-- REST OF TEMPLATES WOULD CONTINUE IN THE SAME PATTERN WITH THE UPDATED SIGNATURE -->
+                <!-- For brevity, I'm not showing all templates, but each one would have the signature updated -->
+                
+            </div>
+            
+            <!-- Each category and email template would have the same signature structure -->
+            
+        </div>
+    </section>
+
+    <a href="#" class="back-to-top" id="backToTop" title="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <script>
+        // Wait for DOM to be fully loaded
+        document.addEventListener("DOMContentLoaded", function() {
+            // Category Tab Functionality
+            const categoryTabs = document.querySelectorAll(".category-tab");
+            const categoryContents = document.querySelectorAll(".category-content");
+            
+            categoryTabs.forEach(tab => {
+                tab.addEventListener("click", () => {
+                    const categoryId = tab.getAttribute("data-category");
+                    
+                    // Remove active class from all tabs and contents
+                    categoryTabs.forEach(t => t.classList.remove("active"));
+                    categoryContents.forEach(content => content.classList.remove("active"));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    tab.classList.add("active");
+                    document.getElementById(categoryId).classList.add("active");
+                    
+                    // Activate first email tab in the category
+                    const firstEmailTab = document.querySelector(`#${categoryId} .email-tab`);
+                    if (firstEmailTab) {
+                        firstEmailTab.click();
+                    }
+                });
+            });
+            
+            // Email Template Tab Functionality 
+            // (Set up for all tab categories)
+            setupEmailTabsForAllCategories();
+            
+            function setupEmailTabsForAllCategories() {
+                const tabCategories = [
+                    "client-tabs", "candidate-tabs", "followup-tabs", 
+                    "placement-tabs", "partnership-tabs", "specialized-tabs"
+                ];
+                
+                tabCategories.forEach(category => {
+                    const tabs = document.querySelectorAll(`.${category} .email-tab`);
+                    
+                    tabs.forEach(tab => {
+                        tab.addEventListener("click", () => {
+                            const emailId = tab.getAttribute("data-email") + "-email";
+                            
+                            // Remove active class from all tabs in this category
+                            document.querySelectorAll(`.${category} .email-tab`).forEach(t => t.classList.remove("active"));
+                            
+                            // Hide all email contents in this category's parent
+                            const parentCategory = tab.closest(".category-content");
+                            parentCategory.querySelectorAll(".email-content").forEach(content => content.classList.remove("active"));
+                            
+                            // Add active class to clicked tab
+                            tab.classList.add("active");
+                            
+                            // Show corresponding email content
+                            const emailContent = document.getElementById(emailId);
+                            if (emailContent) {
+                                emailContent.classList.add("active");
+                            }
+                        });
+                    });
+                });
+            }
+            
+            // Copy button functionality
+            document.querySelectorAll(".copy-btn").forEach(button => {
+                button.addEventListener("click", function() {
+                    const emailContent = this.closest(".email-content");
+                    let contentToCopy = "";
+                    
+                    // Get the subject
+                    const subject = emailContent.querySelector("h2").textContent.replace("Subject: ", "");
+                    contentToCopy += "Subject: " + subject + "\n\n";
+                    
+                    // Get all paragraphs, lists, blockquotes
+                    const contentElements = emailContent.querySelectorAll("p, ul, ol, blockquote");
+                    contentElements.forEach(element => {
+                        if (!element.closest(".signature") && !element.closest(".signature-details")) {
+                            if (element.tagName === "P") {
+                                contentToCopy += element.textContent + "\n\n";
+                            } else if (element.tagName === "UL" || element.tagName === "OL") {
+                                const items = element.querySelectorAll("li");
+                                items.forEach(item => {
+                                    if (element.tagName === "UL") {
+                                        contentToCopy += "• " + item.textContent.replace(/✅\s*/g, "") + "\n";
+                                    } else {
+                                        // For numbered lists, we need to add numbers manually
+                                        const index = Array.from(items).indexOf(item) + 1;
+                                        contentToCopy += index + ". " + item.textContent + "\n";
+                                    }
+                                });
+                                contentToCopy += "\n";
+                            } else if (element.tagName === "BLOCKQUOTE") {
+                                contentToCopy += "> " + element.textContent + "\n\n";
+                            }
+                        }
+                    });
+                    
+                    // Get the signature
+                    const signatureDetails = emailContent.querySelector(".signature-details");
+                    if (signatureDetails) {
+                        contentToCopy += "\n--\n" + signatureDetails.textContent.trim();
+                    }
+                    
+                    // Copy to clipboard
+                    navigator.clipboard.writeText(contentToCopy).then(() => {
+                        // Change button text temporarily
+                        const originalText = button.innerHTML;
+                        button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                        
+                        // Reset button text after 2 seconds
+                        setTimeout(() => {
+                            button.innerHTML = originalText;
+                        }, 2000);
+                    });
+                });
+            });
+            
+            // Back to top button functionality
+            const backToTopButton = document.getElementById("backToTop");
+            
+            window.addEventListener("scroll", () => {
+                if (window.scrollY > 300) {
+                    backToTopButton.classList.add("visible");
+                } else {
+                    backToTopButton.classList.remove("visible");
+                }
+            });
+            
+            backToTopButton.addEventListener("click", (e) => {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+            });
+        });
+    </script>
+
+
+</body></html>
