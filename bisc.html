@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Biscuit NFT Collection on Zora & Base</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --base-blue: #0052FF;
+      --base-blue-dark: #0045d8;
+      --zora-yellow: #FFCC49;
+      --zora-yellow-dark: #e5b52d;
+      --bg-color: #0c0c14;
+      --card-bg: #13131f;
+      --card-bg-hover: #1a1a2e;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0b8;
+      --text-tertiary: #6e6e8f;
+      --accent-purple: #7657ff;
+      --accent-pink: #e272fa;
+      --success-green: #00cc88;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --glow: 0 0 20px rgba(118, 87, 255, 0.3);
+    }
+    
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
+    
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--bg-color);
+      background-image: 
+        radial-gradient(circle at 20% 30%, rgba(0, 82, 255, 0.15) 0%, transparent 30%),
+        radial-gradient(circle at 80% 70%, rgba(255, 204, 73, 0.15) 0%, transparent 30%);
+      font-family: 'Inter', sans-serif;
+      color: var(--text-primary);
+      padding: 20px;
+      line-height: 1.6;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    
+    .panel {
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 48px;
+      box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5), var(--glow);
+      border: 1px solid var(--border-color);
+      animation: fadeIn 0.8s ease-out;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      background: linear-gradient(90deg, var(--zora-yellow), var(--accent-pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.02em;
+    }
+    
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      font-weight: 400;
+    }
+    
+    .platforms {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    
+    .platform {
+      display: flex;
+      align-items: center;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    
+    .platform.base {
+      color: var(--base-blue);
+      border: 1px solid rgba(0, 82, 255, 0.3);
+    }
+    
+    .platform.zora {
+      color: var(--zora-yellow);
+      border: 1px solid rgba(255, 204, 73, 0.3);
+    }
+    
+    .platform-icon {
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
+      border-radius: 50%;
+    }
+    
+    .base-icon {
+      background-color: var(--base-blue);
+    }
+    
+    .zora-icon {
+      background-color: var(--zora-yellow);
+    }
+    
+    .steps-container {
+      margin-bottom: 40px;
+    }
+    
+    .steps-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem;
+      margin-bottom: 24px;
+      font-weight: 600;
+    }
+    
+    .steps {
+      list-style: none;
+      counter-reset: step;
+    }
+    
+    .step {
+      position: relative;
+      padding: 24px 28px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 16px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+      animation: fadeInUp 0.5s both;
+    }
+    
+    .step:hover {
+      background: var(--card-bg-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      border-color: rgba(118, 87, 255, 0.2);
+    }
+    
+    .step:nth-child(1) { animation-delay: 0.1s; }
+    .step:nth-child(2) { animation-delay: 0.2s; }
+    .step:nth-child(3) { animation-delay: 0.3s; }
+    .step:nth-child(4) { animation-delay: 0.4s; }
+    
+    .step-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .step-number {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--accent-purple);
+      margin-right: 12px;
+      width: 28px;
+      height: 28px;
+      background: rgba(118, 87, 255, 0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .step-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .step-content {
+      color: var(--text-secondary);
+      padding-left: 40px;
+      font-size: 0.95rem;
+    }
+    
+    .step-content p {
+      margin-bottom: 12px;
+    }
+    
+    .step-content p:last-child {
+      margin-bottom: 0;
+    }
+    
+    .keyword {
+      color: var(--accent-pink);
+      font-weight: 500;
+    }
+    
+    .tag {
+      display: inline-block;
+      background: rgba(118, 87, 255, 0.1);
+      padding: 3px 8px;
+      border-radius: 6px;
+      color: var(--accent-purple);
+      font-size: 0.85rem;
+      font-weight: 500;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    
+    .info-box {
+      background: rgba(0, 82, 255, 0.1);
+      border-left: 3px solid var(--base-blue);
+      padding: 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 24px 0;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    
+    .info-box-title {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .info-icon {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      background: var(--base-blue);
+      border-radius: 50%;
+      margin-right: 8px;
+      position: relative;
+    }
+    
+    .info-icon::before {
+      content: "i";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 16px 24px;
+      border-radius: 12px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--base-blue), var(--accent-purple));
+      color: var(--text-primary);
+      box-shadow: 0 4px 20px rgba(0, 82, 255, 0.3);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(0, 82, 255, 0.4);
+    }
+    
+    .btn-secondary {
+      background: rgba(255, 204, 73, 0.1);
+      color: var(--zora-yellow);
+      border: 1px solid rgba(255, 204, 73, 0.3);
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(255, 204, 73, 0.15);
+      transform: translateY(-2px);
+    }
+    
+    .footer {
+      text-align: center;
+      color: var(--text-tertiary);
+      font-size: 0.9rem;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-color);
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    
+    @media (max-width: 768px) {
+      .panel {
+        padding: 32px 24px;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .platforms {
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .panel {
+        padding: 24px 20px;
+      }
+      
+      .step {
+        padding: 20px;
+      }
+      
+      .step-content {
+        padding-left: 32px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="panel">
+      <div class="header">
+        <h1>Biscuit Memorial Collection</h1>
+        <p class="subtitle">Create a meaningful NFT collection honoring Biscuit while supporting your fundraiser</p>
+        <div class="platforms">
+          <div class="platform base">
+            <div class="platform-icon base-icon"></div>
+            <span>Base Network</span>
+          </div>
+          <div class="platform zora">
+            <div class="platform-icon zora-icon"></div>
+            <span>Zora Protocol</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="steps-container">
+        <h2 class="steps-title">Create Your Zora Collection</h2>
+        <ul class="steps">
+          <li class="step">
+            <div class="step-header">
+              <div class="step-number">1</div>
+              <div class="step-title">Connect to Zora</div>
+            </div>
+            <div class="step-content">
+              <p>Visit <a href="https://zora.co/create" style="color: var(--zora-yellow);">zora.co/create</a> and connect your wallet. Make sure your wallet is on the <span class="keyword">Base network</span> for lower fees and faster transactions.</p>
+              <p>You can use Coinbase Wallet, Rainbow, or MetaMask—all support Base network.</p>
+            </div>
+          </li>
+          
+          <li class="step">
+            <div class="step-header">
+              <div class="step-number">2</div>
+              <div class="step-title">Create Biscuit Collection</div>
+            </div>
+            <div class="step-content">
+              <p>After connecting, select <span class="keyword">Create → New Collection</span>. Upload your best photos of Biscuit.</p>
+              <p>Add a heartfelt description about Biscuit and your fundraising goals. Include links to your GoFundMe in the description.</p>
+              <p>Add the tag <span class="tag">#BiscuitMemorial</span> to improve discoverability.</p>
+            </div>
+          </li>
+          
+          <li class="step">
+            <div class="step-header">
+              <div class="step-number">3</div>
+              <div class="step-title">Configure NFT Settings</div>
+            </div>
+            <div class="step-content">
+              <p>You have two pricing options:</p>
+              <p>• <span class="keyword">Fixed Price</span>: Set an affordable price like 0.005 ETH (~$15) to maximize participation</p>
+              <p>• <span class="keyword">Free Mint</span>: Allow free claiming with an optional donation feature</p>
+              <p>Set <span class="keyword">Creator Earnings</span> to 10% to receive royalties from secondary sales—direct these to your fundraiser.</p>
+            </div>
+          </li>
+          
+          <li class="step">
+            <div class="step-header">
+              <div class="step-number">4</div>
+              <div class="step-title">Promote & Engage</div>
+            </div>
+            <div class="step-content">
+              <p>Share your collection link across platforms:</p>
+              <p>• Add the Zora collection link to your GoFundMe page</p>
+              <p>• Share regular updates on social media with <span class="tag">#BiscuitOnChain</span></p>
+              <p>• Create short videos showing Biscuit's journey and how funds are helping</p>
+              <p>Post updates directly on Zora using their "Posts" feature—connecting with your NFT holders creates a lasting community.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="info-box">
+        <div class="info-box-title">
+          <span class="info-icon"></span>
+          Base Network Advantage
+        </div>
+        <p>Creating your collection on Base through Zora gives you significantly lower gas fees than Ethereum Mainnet, making it more accessible for supporters to participate in honoring Biscuit.</p>
+      </div>
+      
+      <div class="links">
+        <a href="https://zora.co/create" class="btn btn-primary" target="_blank">Create Biscuit Collection on Zora</a>
+        <a href="https://help.zora.co/en/articles/6383282-creator-earnings" class="btn btn-secondary" target="_blank">Learn About Creator Earnings</a>
+      </div>
+      
+      <div class="footer">
+        <p>Questions? Hit me back. Let's make Biscuit's memory live forever on-chain while supporting your cause. ❤️</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
